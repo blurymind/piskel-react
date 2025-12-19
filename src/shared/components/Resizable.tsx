@@ -57,7 +57,7 @@ export const ResizablePane = ({
           handleMouseDown={handleMouseDown}
         />
       )}
-      <div className="overflow-hidden">
+      <div className="overflow-hidden w-full h-full">
         {children}
       </div>
      
