@@ -24,6 +24,24 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
           Home
         </Link>{" "}
         <Link
+          to="/code"
+          activeProps={{
+            className: "font-bold",
+          }}
+          activeOptions={{ exact: true }}
+        >
+          Code
+        </Link>{" "}
+        <Link
+          to="/editors"
+          activeProps={{
+            className: "font-bold",
+          }}
+          activeOptions={{ exact: true }}
+        >
+          Editors
+        </Link>{" "}
+        <Link
           to="/about"
           activeProps={{
             className: "font-bold",

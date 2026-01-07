@@ -4,7 +4,6 @@ import { router } from "./main";
 
 function InnerApp() {
   // const auth = useAuth();
-
   // if (auth.loading) {
   //   return (
   //     <div className="flex h-screen w-full items-center justify-center p-4">
@@ -12,7 +11,6 @@ function InnerApp() {
   //     </div>
   //   );
   // }
-
   return <RouterProvider router={router} />;
 }
 

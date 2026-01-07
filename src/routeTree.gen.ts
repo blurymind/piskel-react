@@ -9,11 +9,23 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as EditorsRouteImport } from './routes/editors'
+import { Route as CodeRouteImport } from './routes/code'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedProtectedRouteRouteImport } from './routes/_authenticated/protected-route'
 
+const EditorsRoute = EditorsRouteImport.update({
+  id: '/editors',
+  path: '/editors',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CodeRoute = CodeRouteImport.update({
+  id: '/code',
+  path: '/code',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -38,11 +50,15 @@ const AuthenticatedProtectedRouteRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/code': typeof CodeRoute
+  '/editors': typeof EditorsRoute
   '/protected-route': typeof AuthenticatedProtectedRouteRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/code': typeof CodeRoute
+  '/editors': typeof EditorsRoute
   '/protected-route': typeof AuthenticatedProtectedRouteRoute
 }
 export interface FileRoutesById {
@@ -50,18 +66,22 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/about': typeof AboutRoute
+  '/code': typeof CodeRoute
+  '/editors': typeof EditorsRoute
   '/_authenticated/protected-route': typeof AuthenticatedProtectedRouteRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/protected-route'
+  fullPaths: '/' | '/about' | '/code' | '/editors' | '/protected-route'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/protected-route'
+  to: '/' | '/about' | '/code' | '/editors' | '/protected-route'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/about'
+    | '/code'
+    | '/editors'
     | '/_authenticated/protected-route'
   fileRoutesById: FileRoutesById
 }
@@ -69,10 +89,26 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AboutRoute: typeof AboutRoute
+  CodeRoute: typeof CodeRoute
+  EditorsRoute: typeof EditorsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/editors': {
+      id: '/editors'
+      path: '/editors'
+      fullPath: '/editors'
+      preLoaderRoute: typeof EditorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/code': {
+      id: '/code'
+      path: '/code'
+      fullPath: '/code'
+      preLoaderRoute: typeof CodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -120,6 +156,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AboutRoute: AboutRoute,
+  CodeRoute: CodeRoute,
+  EditorsRoute: EditorsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
