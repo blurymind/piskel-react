@@ -18,7 +18,7 @@ function CustomDivider(props: any) {
       style={{
         // [isHorizontal ? "left" : "top"]: props.currentSize - 30,
         zIndex: 999,
-        width: props.isDragging ? window.innerWidth : undefined,
+        width: props.isDragging ? window.innerWidth : 3,
         // height: props.isDragging ? window.innerHeight - 50 : 40,
       }}
     >
@@ -30,7 +30,7 @@ function CustomDivider(props: any) {
           // width: 40,
           [isHorizontal ? "left" : "top"]: props.currentSize,
         }}
-        className="place-content-center relative text-center rounded-sm h-full w-1 hover:w-3 hover:bg-blue-500/20 bg-blue-500/10 items-center"
+        className="place-content-center relative text-center rounded-sm h-full w-2 hover:w-3 hover:bg-blue-500/20 bg-blue-500/10 items-center"
       >
         {isHorizontal ? "|" : "--"}
       </div>

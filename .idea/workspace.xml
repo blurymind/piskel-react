@@ -109,7 +109,7 @@
       <workItem from="1767791377782" duration="10000" />
       <workItem from="1767797977824" duration="6000" />
       <workItem from="1767797991759" duration="9871000" />
-      <workItem from="1768239228968" duration="18447000" />
+      <workItem from="1768239228968" duration="18565000" />
     </task>
     <task id="LOCAL-00001" summary="err">
       <option name="closed" value="true" />
@@ -191,7 +191,15 @@
       <option name="project" value="LOCAL" />
       <updated>1768257094053</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="fix some iframes mess with resize view events">
+      <option name="closed" value="true" />
+      <created>1768257731320</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1768257731320</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
