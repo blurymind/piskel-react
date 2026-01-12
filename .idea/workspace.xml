@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2f0a5c23-5285-4f5d-ab9e-815dc820be27" name="Changes" comment="iframe editors">
+    <list default="true" id="2f0a5c23-5285-4f5d-ab9e-815dc820be27" name="Changes" comment="pass built in components, use better pane">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/code.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/code.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shared/components/RenderComponentFromString.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/components/RenderComponentFromString.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shared/utils/initData.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/utils/initData.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,7 +109,7 @@
       <workItem from="1767791377782" duration="10000" />
       <workItem from="1767797977824" duration="6000" />
       <workItem from="1767797991759" duration="9871000" />
-      <workItem from="1768239228968" duration="3852000" />
+      <workItem from="1768239228968" duration="11518000" />
     </task>
     <task id="LOCAL-00001" summary="err">
       <option name="closed" value="true" />
@@ -139,7 +135,15 @@
       <option name="project" value="LOCAL" />
       <updated>1767806488170</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="pass built in components, use better pane">
+      <option name="closed" value="true" />
+      <created>1768243166574</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1768243166574</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -159,6 +163,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="err" />
     <MESSAGE value="iframe editors" />
-    <option name="LAST_COMMIT_MESSAGE" value="iframe editors" />
+    <MESSAGE value="pass built in components, use better pane" />
+    <option name="LAST_COMMIT_MESSAGE" value="pass built in components, use better pane" />
   </component>
 </project>
