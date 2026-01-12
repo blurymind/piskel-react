@@ -36,8 +36,8 @@ export const SplitView = ({ direction, children, divider, ...props }: any) => {
 };
 import AceEditor from "react-ace";
 import { PiskelReact } from "./piskel-react/PiskelReact.tsx";
-
-export const ReusableComponents = { SplitView, View: Pane, AceEditor, PiskelReact };
+import { CodeEditor } from "./CodeEditor.tsx";
+export const ReusableComponents = { SplitView, View: Pane, AceEditor, PiskelReact, CodeEditor };
 
 const data = {
   useCallback,

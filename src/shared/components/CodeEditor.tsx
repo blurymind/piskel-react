@@ -16,12 +16,25 @@ import "ace-builds/src-noconflict/theme-monokai";
 import Beautify from "ace-builds/src-noconflict/ext-beautify";
 import Emmet from "ace-builds/src-noconflict/ext-emmet";
 Emmet.isSupportedMode = () => true;
-
 Emmet.setCore(emmet);
-import { useRef } from "react";
-import { initDataEditors } from "../utils/initData.ts";
 
-export const CodeEditor = ({ selected, code, onChange }: any) => {
+import { useRef } from "react";
+
+export const CodeEditor = ({
+  options = {
+    enableBasicAutocompletion: true,
+    enableLiveAutocompletion: true,
+    enableSnippets: true,
+    showLineNumbers: true,
+    tabSize: 2,
+    enableAutoIndent: true,
+    enableEmmet: true,
+  },
+  selectedCode,
+  onChange,
+  mode = "tsx",
+  theme = "monokai",
+}: any) => {
   const [tabSize, setTabSize] = useLocalStorage<number>("tabSize", 2);
   const editorRef = useRef(null);
   console.log({ Emmet });
@@ -32,32 +45,26 @@ export const CodeEditor = ({ selected, code, onChange }: any) => {
     }
   };
 
-  const selectedCode = code[selected];
-  console.log({ tabSize });
   return (
-    <div className="flex flex-1 h-full">
+    <div className="flex flex-1 h-full flex-col relative" style={{ height: "calc(100% - 25px)" }}>
       <AceEditor
-        mode="tsx"
-        theme="monokai"
+        mode={mode}
+        theme={theme}
         value={selectedCode}
         onChange={onChange}
         editorProps={{ $blockScrolling: true }}
         tabSize={tabSize}
-        style={{ width: "100%", height: "calc(100% - 25px)" }}
+        style={{ width: "100%", height: "100%" }}
         ref={editorRef}
-        commands={Emmet.commands}
-        setOptions={{
-          enableBasicAutocompletion: true,
-          enableLiveAutocompletion: true,
-          enableSnippets: true,
-          showLineNumbers: true,
-          tabSize: 2,
-          enableAutoIndent: true,
-          enableEmmet: true,
-        }}
+        commands={options.enableEmmet ? Emmet.commands : Beautify.commands}
+        setOptions={options}
       />
-      <div className="flex-auto flex">
-        <button title="Format (Ctrl+Shift+B)" className="mx-4 px-3  border-1 border-orange-500" onClick={onPrettier}>
+      <div className="flex-auto flex absolute bottom-0 right-0 mb-3">
+        <button
+          title="Format (Ctrl+Shift+B)"
+          className="mx-4 px-3 border-1 border-orange-500 hover:border-orange-300 rounded-md"
+          onClick={onPrettier}
+        >
           --format
         </button>
         <div>indent:</div>
@@ -67,7 +74,7 @@ export const CodeEditor = ({ selected, code, onChange }: any) => {
           type="number"
           min={1}
           max={16}
-          className="min-w-5 ml-3"
+          className="min-w-5 border-1 border-orange-500 hover:border-orange-300 rounded-md px-2 mx-1"
         />
       </div>
     </div>

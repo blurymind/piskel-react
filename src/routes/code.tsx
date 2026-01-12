@@ -6,49 +6,19 @@ import RenderComponentFromString, { SplitView, View } from "../shared/components
 export const Route = createFileRoute("/code")({
   component: RouteComponent,
 });
-import emmet from "emmet-core";
-import AceEditor from "react-ace";
-import "ace-builds/src-noconflict/ace";
-import "ace-builds/src-noconflict/ext-searchbox";
-import "ace-builds/src-noconflict/ext-language_tools";
-import "ace-builds/src-noconflict/mode-javascript";
-import "ace-builds/src-noconflict/mode-tsx";
-import "ace-builds/src-noconflict/mode-jsx";
-import "ace-builds/src-noconflict/mode-typescript";
-import "ace-builds/src-noconflict/mode-html";
 
-import "ace-builds/src-noconflict/theme-dracula";
-import "ace-builds/src-noconflict/theme-monokai";
-
-import Beautify from "ace-builds/src-noconflict/ext-beautify";
-import Emmet from "ace-builds/src-noconflict/ext-emmet";
-Emmet.isSupportedMode = () => true;
-
-Emmet.setCore(emmet);
 import { useRef } from "react";
 import { initDataEditors, newTemplate } from "../shared/utils/initData.ts";
+import { CodeEditor } from "../shared/components/CodeEditor.tsx";
 
 function RouteComponent() {
   const [selected, setSelected] = useLocalStorage("selFrameCode", "piskel");
   const [code, setCode] = useLocalStorage<Record<string, string>>("framesCode", initDataEditors);
-  const [tabSize, setTabSize] = useLocalStorage<number>("tabSize", 2);
   const errorRef = useRef(null);
-  const editorRef = useRef(null);
   function onChange(newValue: string) {
     setCode((prev) => ({ ...prev, [selected]: newValue }));
     errorRef.current?.resetErrorBoundary();
-    editorRef.current?.editor.execCommand("emmet:expand_abbreviation_with_tab");
-    // editorRef.current?.editor.setOption("enableEmmet", true);
   }
-  console.log({ Emmet });
-
-  const onPrettier = () => {
-    if (editorRef.current?.editor) {
-      // editorRef.current?.editor.getSession().setMode("ace/mode/tsx");
-      console.log("Prettier", editorRef.current.editor, Beautify);
-      Beautify.beautify(editorRef.current?.editor.getSession());
-    }
-  };
 
   // todo https://blog.openreplay.com/resizable-split-panes-from-scratch/
   console.log(errorRef?.current);
@@ -81,7 +51,6 @@ function RouteComponent() {
   };
 
   const selectedCode = code[selected];
-  console.log({ tabSize });
   return (
     <div className="flex flex-1 h-full">
       {/*<ResizablePane minSize={20} initialSize={50} maxSize={80} isVertical={false}>*/}
@@ -107,46 +76,9 @@ function RouteComponent() {
                 r
               </button>
             </div>
-            <div className="flex-auto flex">
-              <button
-                title="Format (Ctrl+Shift+B)"
-                className="mx-4 px-3  border-1 border-orange-500"
-                onClick={onPrettier}
-              >
-                --format
-              </button>
-              <div>indent:</div>
-              <input
-                value={tabSize}
-                onChange={(ev) => setTabSize(parseInt(ev.target.value))}
-                type="number"
-                min={1}
-                max={16}
-                className="min-w-5 ml-3"
-              />
-            </div>
           </div>
 
-          <AceEditor
-            mode="tsx"
-            theme="monokai"
-            value={selectedCode}
-            onChange={onChange}
-            editorProps={{ $blockScrolling: true }}
-            tabSize={tabSize}
-            style={{ width: "100%", height: "calc(100% - 25px)" }}
-            ref={editorRef}
-            commands={Emmet.commands}
-            setOptions={{
-              enableBasicAutocompletion: true,
-              enableLiveAutocompletion: true,
-              enableSnippets: true,
-              showLineNumbers: true,
-              tabSize: 2,
-              enableAutoIndent: true,
-              enableEmmet: true,
-            }}
-          />
+          <CodeEditor selectedCode={selectedCode} onChange={onChange} />
         </View>
         {/*</ResizablePane>*/}
         {/*<ResizablePane minSize={20} initialSize={50} grow>*/}
