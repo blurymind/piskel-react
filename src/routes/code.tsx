@@ -1,10 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import StringToReactComponent from "string-to-react-component";
 import { useLocalStorage } from "@uidotdev/usehooks";
 
-import ErrorBoundary from "../shared/components/ErrorBoundary";
-import RenderComponentFromString from "../shared/components/RenderComponentFromString";
-import { ResizablePane } from "../shared/components/Resizable";
+import RenderComponentFromString, { SplitView, View } from "../shared/components/RenderComponentFromString";
 
 export const Route = createFileRoute("/code")({
   component: RouteComponent,
@@ -61,32 +58,38 @@ function RouteComponent() {
   };
   const selectedCode = code[selected];
   return (
-    <div className="flex flex-1 h-full w-full">
-      <ResizablePane minSize={20} initialSize={50} maxSize={80} isVertical={false}>
-        <div className="flex flex-1 gap-3">
-          <select onChange={onChangeSelected} defaultValue={selected}>
-            {Object.keys(code).map((key) => (
-              <option value={key} key={key}>
-                {key}
-              </option>
-            ))}
-          </select>
-          <button onClick={onAddNew}>+</button>
-          <button onClick={onRemoveSelected}>-</button>
-        </div>
-        <AceEditor
-          mode="typescript"
-          theme="dracula"
-          value={selectedCode}
-          onChange={onChange}
-          name="UNIQUE_ID_OF_DIV"
-          editorProps={{ $blockScrolling: true }}
-          style={{ width: "100%", height: "100%" }}
-        />
-      </ResizablePane>
-      <ResizablePane minSize={20} initialSize={50} grow>
-        <RenderComponentFromString errorRef={errorRef} selectedCode={selectedCode} />
-      </ResizablePane>
+    <div className="flex flex-1 h-full">
+      {/*<ResizablePane minSize={20} initialSize={50} maxSize={80} isVertical={false}>*/}
+      <SplitView direction="horizontal">
+        <View minSize="200px" defaultSize="50%">
+          <div className="flex flex-1 gap-3">
+            <select onChange={onChangeSelected} defaultValue={selected}>
+              {Object.keys(code).map((key) => (
+                <option value={key} key={key}>
+                  {key}
+                </option>
+              ))}
+            </select>
+            <button onClick={onAddNew}>+</button>
+            <button onClick={onRemoveSelected}>-</button>
+          </div>
+
+          <AceEditor
+            mode="typescript"
+            theme="dracula"
+            value={selectedCode}
+            onChange={onChange}
+            name="UNIQUE_ID_OF_DIV"
+            editorProps={{ $blockScrolling: true }}
+            style={{ width: "100%", height: "calc(100% - 25px)" }}
+          />
+        </View>
+        {/*</ResizablePane>*/}
+        {/*<ResizablePane minSize={20} initialSize={50} grow>*/}
+        <View>
+          <RenderComponentFromString errorRef={errorRef} selectedCode={selectedCode} />
+        </View>
+      </SplitView>
     </div>
   );
 }

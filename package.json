@@ -29,6 +29,7 @@
     "react": "^19.0.0",
     "react-ace": "^14.0.1",
     "react-dom": "^19.0.0",
+    "react-split-pane": "^3.0.5",
     "string-to-react-component": "^4.0.1",
     "tailwind": "^4.0.0",
     "tailwindcss": "^4.1.11"

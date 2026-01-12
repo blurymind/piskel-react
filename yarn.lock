@@ -4090,6 +4090,11 @@ react-refresh@^0.17.0:
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.17.0.tgz#b7e579c3657f23d04eccbe4ad2e58a8ed51e7e53"
   integrity sha512-z6F7K9bV85EfseRCp2bzrpyQ0Gkw1uLoCel9XBVWPg/TjRj94SkJzUTGfOa4bs7iJvBWtQG0Wq7wnI0syw3EBQ==
 
+react-split-pane@^3.0.5:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/react-split-pane/-/react-split-pane-3.0.5.tgz#cf7b66d3fa4d7aead6c2b0364c070a7d84b319c6"
+  integrity sha512-6UJ6eK8SO9yBd67QhOUbCZfETtUfOUWaz55joXX2VQwqbBtVGica24sx9g7Qk7U+Lk91ZLhkfr2f+KejvgwJew==
+
 react@^19.0.0:
   version "19.1.0"
   resolved "https://registry.yarnpkg.com/react/-/react-19.1.0.tgz#926864b6c48da7627f004795d6cce50e90793b75"
