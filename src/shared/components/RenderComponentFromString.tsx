@@ -14,25 +14,25 @@ function CustomDivider(props: any) {
   const isHorizontal = props.direction === "horizontal";
   return (
     <div
-      className="absolute"
+      className="absolute h-full"
       style={{
         // [isHorizontal ? "left" : "top"]: props.currentSize - 30,
         zIndex: 999,
-        width: props.isDragging ? window.innerWidth - 50 : 40,
-        height: props.isDragging ? window.innerHeight - 50 : 40,
+        width: props.isDragging ? window.innerWidth : undefined,
+        // height: props.isDragging ? window.innerHeight - 50 : 40,
       }}
     >
       <div
         {...props}
         style={{
           ...props.style,
-          background: "blue",
-          width: 40,
-          [isHorizontal ? "left" : "top"]: props.currentSize - 30,
+          // background: "b",
+          // width: 40,
+          [isHorizontal ? "left" : "top"]: props.currentSize,
         }}
-        className="relative text-center rounded-sm"
+        className="place-content-center relative text-center rounded-sm h-full w-1 hover:w-3 hover:bg-blue-500/20 bg-blue-500/10 items-center"
       >
-        {isHorizontal ? "||" : "="}
+        {isHorizontal ? "|" : "--"}
       </div>
     </div>
   );
