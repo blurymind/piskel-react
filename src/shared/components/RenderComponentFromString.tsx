@@ -10,18 +10,24 @@ const babelOptions = {
 };
 
 function CustomDivider(props: any) {
-  console.log({ props });
+  // console.log({ props });
+  const isHorizontal = props.direction === "horizontal";
   return (
     <div
       className="absolute"
-      style={{ [props.direction === "horizontal" ? "left" : "top"]: props.currentSize - 30, zIndex: 999 }}
+      style={{
+        [isHorizontal ? "left" : "top"]: props.currentSize - 30,
+        zIndex: 999,
+        width: props.isDragging ? window.innerWidth - 50 : 40,
+        height: props.isDragging ? window.innerHeight - 50 : 40,
+      }}
     >
       <div
         {...props}
         style={{ ...props.style, background: "blue", width: 40 }}
         className="relative text-center rounded-sm"
       >
-        ||
+        {isHorizontal ? "||" : "="}
       </div>
     </div>
   );

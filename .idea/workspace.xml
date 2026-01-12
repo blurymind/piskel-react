@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2f0a5c23-5285-4f5d-ab9e-815dc820be27" name="Changes" comment="make code editor customisable">
+    <list default="true" id="2f0a5c23-5285-4f5d-ab9e-815dc820be27" name="Changes" comment="reset error boundary more often, import it into itself">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/code.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/code.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/editors.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/editors.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/shared/components/RenderComponentFromString.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/components/RenderComponentFromString.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -111,7 +109,7 @@
       <workItem from="1767791377782" duration="10000" />
       <workItem from="1767797977824" duration="6000" />
       <workItem from="1767797991759" duration="9871000" />
-      <workItem from="1768239228968" duration="17211000" />
+      <workItem from="1768239228968" duration="17606000" />
     </task>
     <task id="LOCAL-00001" summary="err">
       <option name="closed" value="true" />
@@ -169,7 +167,15 @@
       <option name="project" value="LOCAL" />
       <updated>1768255895096</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="reset error boundary more often, import it into itself">
+      <option name="closed" value="true" />
+      <created>1768256482792</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1768256482792</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -193,6 +199,7 @@
     <MESSAGE value="better editor tsx" />
     <MESSAGE value="add emmet" />
     <MESSAGE value="make code editor customisable" />
-    <option name="LAST_COMMIT_MESSAGE" value="make code editor customisable" />
+    <MESSAGE value="reset error boundary more often, import it into itself" />
+    <option name="LAST_COMMIT_MESSAGE" value="reset error boundary more often, import it into itself" />
   </component>
 </project>
