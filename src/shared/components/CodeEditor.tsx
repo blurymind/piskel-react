@@ -8,6 +8,7 @@ import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/mode-tsx";
 import "ace-builds/src-noconflict/mode-jsx";
 import "ace-builds/src-noconflict/mode-typescript";
+import "ace-builds/src-noconflict/mode-css";
 import "ace-builds/src-noconflict/mode-html";
 
 import "ace-builds/src-noconflict/theme-dracula";
@@ -18,8 +19,10 @@ import Emmet from "ace-builds/src-noconflict/ext-emmet";
 Emmet.isSupportedMode = () => true;
 Emmet.setCore(emmet);
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
+const modes = ["tsx", "jsx", "typescript", "javascript", "html", "css"];
+const themes = ["default", "monokai", "dracula"];
 export const CodeEditor = ({
   options = {
     enableBasicAutocompletion: true,
@@ -35,9 +38,10 @@ export const CodeEditor = ({
   mode = "tsx",
   theme = "monokai",
 }: any) => {
+  const [userMode, setUsedMode] = useState(mode);
+  const [userTheme, setUserTheme] = useState(theme);
   const [tabSize, setTabSize] = useLocalStorage<number>("tabSize", 2);
   const editorRef = useRef(null);
-  console.log({ Emmet });
 
   const onPrettier = () => {
     if (editorRef.current?.editor) {
@@ -48,8 +52,8 @@ export const CodeEditor = ({
   return (
     <div className="flex flex-1 h-full flex-col relative" style={{ height: "calc(100% - 25px)" }}>
       <AceEditor
-        mode={mode}
-        theme={theme}
+        mode={userMode}
+        theme={userTheme}
         value={selectedCode}
         onChange={onChange}
         editorProps={{ $blockScrolling: true }}
@@ -59,7 +63,21 @@ export const CodeEditor = ({
         commands={options.enableEmmet ? Emmet.commands : Beautify.commands}
         setOptions={options}
       />
-      <div className="flex-auto flex absolute bottom-0 right-0 mb-3">
+      <div className="flex-auto flex absolute bottom-0 right-0 mb-3 gap-2">
+        <select onChange={(ev) => setUsedMode(ev.target.value)} defaultValue={userMode}>
+          {modes.map((mode) => (
+            <option value={mode} key={mode}>
+              {mode}
+            </option>
+          ))}
+        </select>
+        <select onChange={(ev) => setUserTheme(ev.target.value)} defaultValue={userTheme}>
+          {themes.map((theme) => (
+            <option value={theme} key={theme}>
+              {theme}
+            </option>
+          ))}
+        </select>
         <button
           title="Format (Ctrl+Shift+B)"
           className="mx-4 px-3 border-1 border-orange-500 hover:border-orange-300 rounded-md"
