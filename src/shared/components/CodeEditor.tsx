@@ -1,5 +1,5 @@
 import { useLocalStorage } from "@uidotdev/usehooks";
-import emmet from "emmet-core";
+// import emmet from "emmet-core";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/ace";
 import "ace-builds/src-noconflict/ext-searchbox";
@@ -15,9 +15,9 @@ import "ace-builds/src-noconflict/theme-dracula";
 import "ace-builds/src-noconflict/theme-monokai";
 
 import Beautify from "ace-builds/src-noconflict/ext-beautify";
-import Emmet from "ace-builds/src-noconflict/ext-emmet";
-Emmet.isSupportedMode = () => true;
-Emmet.setCore(emmet);
+// import Emmet from "ace-builds/src-noconflict/ext-emmet";
+// Emmet.isSupportedMode = () => true;
+// Emmet.setCore(emmet);
 
 import { useRef, useState } from "react";
 
@@ -60,7 +60,8 @@ export const CodeEditor = ({
         tabSize={tabSize}
         style={{ width: "100%", height: "100%" }}
         ref={editorRef}
-        commands={options.enableEmmet ? Emmet.commands : Beautify.commands}
+        // commands={options.enableEmmet ? Emmet.commands : Beautify.commands}
+        commands={Beautify.commands}
         setOptions={options}
       />
       <div className="flex-auto flex absolute bottom-0 right-0 mb-3 gap-2">

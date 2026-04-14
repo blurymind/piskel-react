@@ -10,11 +10,13 @@
   },
   "scripts": {
     "dev": "vite --port 3000",
-    "build": "tsc -b && vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "lint": "biome lint ./src",
     "format": "biome check --write ./src",
-    "format:ci": "biome ci"
+    "format:ci": "biome ci",
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@babel/standalone": "^7.28.5",
@@ -26,7 +28,6 @@
     "ace-builds": "^1.43.5",
     "ace-diff": "^3.0.3",
     "classnames": "^2.5.1",
-    "emmet-core": "^1.0.0",
     "react": "^19.0.0",
     "react-accessible-treeview": "^2.11.2",
     "react-ace": "^14.0.1",
@@ -46,6 +47,7 @@
     "@vite-pwa/assets-generator": "^0.2.6",
     "@vitejs/plugin-react": "^4.2.1",
     "daisyui": "^5.0.43",
+    "gh-pages": "^6.3.0",
     "globals": "^15.14.0",
     "typescript": "~5.7.2",
     "vite": "^6.0.11",

@@ -26,7 +26,7 @@ export const router = createRouter({
     </div>
   ),
   context: {
-    queryClient,
+    // queryClient,
     auth: {
       user: null,
       loading: false,
@@ -42,9 +42,11 @@ declare module "@tanstack/react-router" {
 }
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <App />
-    </QueryClientProvider>
-  </StrictMode>,
+     <App />
+     
+  // <StrictMode>
+  //   {/* <QueryClientProvider client={queryClient}> */}
+  //     <App />
+  //   {/* </QueryClientProvider> */}
+  // </StrictMode>,
 );
