@@ -26,5 +26,3 @@ jobs:
           github_token: ${{ secrets.GH_TOKEN }}
           branch: gh-pages
           folder: dist
-          permissions:
-            contents: write
