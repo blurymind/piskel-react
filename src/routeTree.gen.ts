@@ -14,7 +14,6 @@ import { Route as FilesRouteImport } from './routes/files'
 import { Route as EditorsRouteImport } from './routes/editors'
 import { Route as CodeRouteImport } from './routes/code'
 import { Route as AboutRouteImport } from './routes/about'
-import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 
 const PiskelReactRoute = PiskelReactRouteImport.update({
   id: '/piskel-react',
@@ -41,10 +40,6 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedRoute = AuthenticatedRouteImport.update({
-  id: '/_authenticated',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
@@ -62,7 +57,6 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/_authenticated': typeof AuthenticatedRoute
   '/about': typeof AboutRoute
   '/code': typeof CodeRoute
   '/editors': typeof EditorsRoute
@@ -74,18 +68,10 @@ export interface FileRouteTypes {
   fullPaths: '/about' | '/code' | '/editors' | '/files' | '/piskel-react'
   fileRoutesByTo: FileRoutesByTo
   to: '/about' | '/code' | '/editors' | '/files' | '/piskel-react'
-  id:
-    | '__root__'
-    | '/_authenticated'
-    | '/about'
-    | '/code'
-    | '/editors'
-    | '/files'
-    | '/piskel-react'
+  id: '__root__' | '/about' | '/code' | '/editors' | '/files' | '/piskel-react'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  AuthenticatedRoute: typeof AuthenticatedRoute
   AboutRoute: typeof AboutRoute
   CodeRoute: typeof CodeRoute
   EditorsRoute: typeof EditorsRoute
@@ -130,18 +116,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated': {
-      id: '/_authenticated'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AuthenticatedRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  AuthenticatedRoute: AuthenticatedRoute,
   AboutRoute: AboutRoute,
   CodeRoute: CodeRoute,
   EditorsRoute: EditorsRoute,
