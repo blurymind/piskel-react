@@ -23,10 +23,11 @@ export default defineConfig({
       },
 
       manifest: {
-        name: "react-starter-template",
-        short_name: "react-starter-template",
-        description: "Use degit to clone this template. Do git init, install deps and start working on your project.",
-        theme_color: "#ffffff",
+        name: "piskel plus",
+        short_name: "piskel",
+        description: "Piskel plus. Run piskel without the adds and with nices UX wrapped by react",
+        theme_color: "#000000",
+        start_url: "piskel-react/"
       },
 
       workbox: {

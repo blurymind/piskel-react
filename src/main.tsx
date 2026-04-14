@@ -40,7 +40,7 @@ declare module "@tanstack/react-router" {
     router: typeof router;
   }
 }
-//danna <3
+// omfg https://stackoverflow.com/questions/72851548/permission-denied-to-github-actionsbot
 createRoot(document.getElementById("root")!).render(
      <App />
      
