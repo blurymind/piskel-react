@@ -49,7 +49,7 @@ const sprites = {
 };
 
 function RouteComponent() {
-  const [sprite, setSprite] = useState(sprites.sonic);
+  const [sprite, setSprite] = useState(null);
   const piskelRef = useRef(null);
   return (
     <>

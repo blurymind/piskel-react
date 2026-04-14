@@ -1,6 +1,7 @@
 import { memo, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 
 import "./index.css";
+import { useLocalStorage } from "@uidotdev/usehooks";
 
 const sprites = {
   megaman: {
@@ -48,12 +49,14 @@ const sprites = {
 export const PiskelReact = ({
   piskelAppPath = "piskel/dest/prod/index.html",
   ref,
-  piskelFile = sprites.sonic,
+  piskelFile,
   hideHeader = true,
 }) => {
+    const [editedPiskel, setEditedPiskel] = useLocalStorage("editedPiskel", sprites.mario);
   const piskelRef = useRef(null);
 
   const getPiskel = () => piskelRef.current?.contentWindow?.pskl;
+ 
   const loadSprite = useCallback((sprite) => {
     const pskl = getPiskel();
     if (!pskl || !sprite) return;
@@ -69,12 +72,25 @@ export const PiskelReact = ({
     console.log({ app, fps });
   }, []);
 
+  // todo https://github.com/4ian/GDevelop/blob/94b980313b7ac851610e12a55f767dcfc3316d4c/newIDE/app/public/external/piskel/piskel-main.js#L122
+  const onSavePiskel = () => {
+    const pskl = getPiskel();
+    if (!pskl) return;
+    const piskelData = pskl.app.piskelController.getPiskel();
+    const piskelState = pskl.utils.serialization.Serializer.serialize(piskelData)
+    setEditedPiskel(JSON.parse(piskelState))
+  }
+
   useEffect(() => {
     console.log("load prop changed", { piskelFile });
     if (piskelFile) {
       loadSprite(piskelFile);
+    } else {
+      // loadSprite(editedPiskel);
     }
-  }, [piskelFile]);
+    
+  }, []);
+  
 
   useImperativeHandle(ref, () => {
     return {
@@ -95,7 +111,7 @@ export const PiskelReact = ({
       }
       innerDoc?.querySelector(".fake-piskelapp-header")?.remove();
     }
-    loadSprite(piskelFile);
+    loadSprite(piskelFile ?? editedPiskel ?? sprites.megaman);
   };
 
   // todo onSave callback
@@ -112,6 +128,7 @@ export const PiskelReact = ({
         className="editor-frame"
         src={piskelAppPath}
         onLoad={onLoadPiskelApp}
+        onPointerLeave={onSavePiskel}
       />
     </div>
   );
