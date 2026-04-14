@@ -4,21 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2f0a5c23-5285-4f5d-ab9e-815dc820be27" name="Changes" comment="make code editor more customisable">
-      <change afterPath="$PROJECT_DIR$/src/routes/files.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/shared/components/files/TreeView.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/shared/components/files/Viewer.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/shared/components/files/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/shared/components/files/tree.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/shared/components/files/utils.ts" afterDir="false" />
+    <list default="true" id="2f0a5c23-5285-4f5d-ab9e-815dc820be27" name="Changes" comment="ignore">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routeTree.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routeTree.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/__root.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/__root.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/about.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/about.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +15,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -58,7 +47,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
     "junie.onboarding.icon.badge.shown": "true",
-    "last_opened_file_path": "/home/fox/dev/piskel-libraries/piskel-react/src/shared/components/files",
+    "last_opened_file_path": "/home/fox/dev/piskel-react",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -69,7 +58,7 @@
     "prettierjs.PrettierConfiguration.Package": "/home/fox/dev/piskel-react/node_modules/prettier",
     "settings.editor.selected.configurable": "advanced.settings",
     "to.speed.mode.migration.done": "true",
-    "ts.external.directory.path": "/home/fox/dev/piskel-libraries/piskel-react/node_modules/typescript/lib",
+    "ts.external.directory.path": "/home/fox/dev/piskel-react/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -125,6 +114,7 @@
       <workItem from="1768239228968" duration="18649000" />
       <workItem from="1768297421907" duration="761000" />
       <workItem from="1768298193279" duration="32125000" />
+      <workItem from="1776193598913" duration="552000" />
     </task>
     <task id="LOCAL-00001" summary="err">
       <option name="closed" value="true" />
@@ -230,7 +220,15 @@
       <option name="project" value="LOCAL" />
       <updated>1768298640787</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="ignore">
+      <option name="closed" value="true" />
+      <created>1776193718014</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1776193718014</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -257,6 +255,7 @@
     <MESSAGE value="reset error boundary more often, import it into itself" />
     <MESSAGE value="fix some iframes mess with resize view events" />
     <MESSAGE value="make code editor more customisable" />
-    <option name="LAST_COMMIT_MESSAGE" value="make code editor more customisable" />
+    <MESSAGE value="ignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="ignore" />
   </component>
 </project>

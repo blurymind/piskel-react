@@ -15,7 +15,7 @@
     "lint": "biome lint ./src",
     "format": "biome check --write ./src",
     "format:ci": "biome ci",
-    "predeploy": "yarn build",
+    "predeploy": "yarn run build",
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
