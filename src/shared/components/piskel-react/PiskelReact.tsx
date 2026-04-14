@@ -89,7 +89,11 @@ export const PiskelReact = ({
     } else {
       // loadSprite(editedPiskel);
     }
-    
+    document.addEventListener("pointerout", onSavePiskel)
+    return () => {
+      document.removeEventListener("pointerout", onSavePiskel)
+      onSavePiskel()
+    }
   }, []);
   
 
@@ -130,7 +134,6 @@ export const PiskelReact = ({
         className="editor-frame"
         src={piskelAppPath}
         onLoad={onLoadPiskelApp}
-        onPointerLeave={onSavePiskel}
       />
     </div>
   );
