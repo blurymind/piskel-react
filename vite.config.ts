@@ -6,6 +6,7 @@ import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: 'piskel-react',
   plugins: [
     tanstackRouter({
       target: "react",
@@ -27,7 +28,7 @@ export default defineConfig({
         short_name: "piskel",
         description: "Piskel plus. Run piskel without the adds and with nices UX wrapped by react",
         theme_color: "#000000",
-        start_url: "piskel-react/"
+        start_url: "piskel-react"
       },
 
       workbox: {
@@ -45,4 +46,5 @@ export default defineConfig({
       },
     }),
   ],
+
 });
