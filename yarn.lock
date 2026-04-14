@@ -1643,31 +1643,12 @@
   resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.81.5.tgz#14e0cc778bad8bc11d1cf130709910d8a353bb73"
   integrity sha512-ZJOgCy/z2qpZXWaj/oxvodDx07XcQa9BF92c0oINjHkoqUPsmm3uG08HpTaviviZ/N9eP1f9CM7mKSEkIo7O1Q==
 
-"@tanstack/query-devtools@5.81.2":
-  version "5.81.2"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-devtools/-/query-devtools-5.81.2.tgz#9ac478de2f441881e299d3280063d34c53828234"
-  integrity sha512-jCeJcDCwKfoyyBXjXe9+Lo8aTkavygHHsUHAlxQKKaDeyT0qyQNLKl7+UyqYH2dDF6UN/14873IPBHchcsU+Zg==
-
-"@tanstack/react-query-devtools@^5.81.5":
-  version "5.81.5"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query-devtools/-/react-query-devtools-5.81.5.tgz#1fe8aec80b46686653903d5f49f8468eb3a484d0"
-  integrity sha512-lCGMu4RX0uGnlrlLeSckBfnW/UV+KMlTBVqa97cwK7Z2ED5JKnZRSjNXwoma6sQBTJrcULvzgx2K6jEPvNUpDw==
-  dependencies:
-    "@tanstack/query-devtools" "5.81.2"
-
 "@tanstack/react-query@^5.81.5":
   version "5.81.5"
   resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.81.5.tgz#660dba8bb35f24c4cf3617b299a1e3990a3bb49e"
   integrity sha512-lOf2KqRRiYWpQT86eeeftAGnjuTR35myTP8MXyvHa81VlomoAWNEd8x5vkcAfQefu0qtYCvyqLropFZqgI2EQw==
   dependencies:
     "@tanstack/query-core" "5.81.5"
-
-"@tanstack/react-router-devtools@^1.122.0":
-  version "1.122.0"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-router-devtools/-/react-router-devtools-1.122.0.tgz#c46929a5f92adcc4b8dfc612b39c988f7a172dcb"
-  integrity sha512-UClUnO+PFvX5Ddlhhfkgo/7qSRTM/a/jsT7V5dz9LrSaPCsh7oLQgm6lj1Yu8U9GfpCQBLzWzbsvmYAdpOa/TQ==
-  dependencies:
-    "@tanstack/router-devtools-core" "^1.122.0"
 
 "@tanstack/react-router@^1.122.0":
   version "1.122.0"
@@ -1701,15 +1682,6 @@
     jsesc "^3.1.0"
     tiny-invariant "^1.3.3"
     tiny-warning "^1.0.3"
-
-"@tanstack/router-devtools-core@^1.122.0":
-  version "1.122.0"
-  resolved "https://registry.yarnpkg.com/@tanstack/router-devtools-core/-/router-devtools-core-1.122.0.tgz#ee34c9b171254c81d69748a5dcde911b0acfc8e8"
-  integrity sha512-3AWnGAlC6GBrS9ral+CeThwHt690T0RtxMoRpTYdK5aJ5qyegWeQXqIjd6WPWNRjxYSKsDjPY2h77HPoAm7F5Q==
-  dependencies:
-    clsx "^2.1.1"
-    goober "^2.1.16"
-    solid-js "^1.9.5"
 
 "@tanstack/router-generator@1.122.0":
   version "1.122.0"
@@ -2348,11 +2320,6 @@ classnames@^2.5.1:
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.5.1.tgz#ba774c614be0f016da105c858e7159eae8e7687b"
   integrity sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==
 
-clsx@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/clsx/-/clsx-2.1.1.tgz#eed397c9fd8bd882bfb18deab7102049a2f32999"
-  integrity sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==
-
 color-convert@^1.9.0:
   version "1.9.3"
   resolved "https://registry.yarnpkg.com/color-convert/-/color-convert-1.9.3.tgz#bb71850690e1f136567de629d2d5471deda4c1e8"
@@ -2542,7 +2509,7 @@ crypto2@2.0.0:
     node-rsa "0.4.2"
     util.promisify "1.0.0"
 
-csstype@^3.0.2, csstype@^3.1.0:
+csstype@^3.0.2:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.3.tgz#d80ff294d114fb0e6ac500fbf85b60137d7eff81"
   integrity sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==
@@ -3289,11 +3256,6 @@ globalthis@^1.0.4:
   dependencies:
     define-properties "^1.2.1"
     gopd "^1.0.1"
-
-goober@^2.1.16:
-  version "2.1.16"
-  resolved "https://registry.yarnpkg.com/goober/-/goober-2.1.16.tgz#7d548eb9b83ff0988d102be71f271ca8f9c82a95"
-  integrity sha512-erjk19y1U33+XAMe1VTvIONHYoSqE4iS7BYUZfHaqeohLmnC0FdxEh7rQU+6MZ4OajItzjZFSRtVANrQwNq6/g==
 
 gopd@^1.0.1, gopd@^1.2.0:
   version "1.2.0"
@@ -4767,16 +4729,6 @@ serialize-javascript@^6.0.1:
   dependencies:
     randombytes "^2.1.0"
 
-seroval-plugins@~1.3.0:
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/seroval-plugins/-/seroval-plugins-1.3.2.tgz#4200b538d699853c9bf5c3b7155c498c7c263a6a"
-  integrity sha512-0QvCV2lM3aj/U3YozDiVwx9zpH0q8A60CTWIv4Jszj/givcudPb48B+rkU5D51NJ0pTpweGMttHjboPa9/zoIQ==
-
-seroval@~1.3.0:
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/seroval/-/seroval-1.3.2.tgz#7e5be0dc1a3de020800ef013ceae3a313f20eca7"
-  integrity sha512-RbcPH1n5cfwKrru7v7+zrZvjLurgHhGyso3HTyGtRivGWgYjbOmGuivCQaORNELjNONoK35nj28EoWul9sb1zQ==
-
 serve-static@1.13.2:
   version "1.13.2"
   resolved "https://registry.yarnpkg.com/serve-static/-/serve-static-1.13.2.tgz#095e8472fd5b46237db50ce486a43f4b86c6cec1"
@@ -4916,15 +4868,6 @@ smob@^1.0.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/smob/-/smob-1.5.0.tgz#85d79a1403abf128d24d3ebc1cdc5e1a9548d3ab"
   integrity sha512-g6T+p7QO8npa+/hNx9ohv1E5pVCmWrVCUzUXJyLdMmftX6ER0oiWY/w9knEonLpnOp6b6FenKnMfR8gqwWdwig==
-
-solid-js@^1.9.5:
-  version "1.9.7"
-  resolved "https://registry.yarnpkg.com/solid-js/-/solid-js-1.9.7.tgz#96ff7800648a30f22d29275264375589f3a725e9"
-  integrity sha512-/saTKi8iWEM233n5OSi1YHCCuh66ZIQ7aK2hsToPe4tqGm7qAejU1SwNuTPivbWAYq7SjuHVVYxxuZQNRbICiw==
-  dependencies:
-    csstype "^3.1.0"
-    seroval "~1.3.0"
-    seroval-plugins "~1.3.0"
 
 source-map-js@^1.2.1:
   version "1.2.1"

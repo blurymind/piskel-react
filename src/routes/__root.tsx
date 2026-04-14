@@ -1,7 +1,7 @@
 import type { QueryClient } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { createRootRouteWithContext, Outlet, Link } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+// import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { AuthContextType } from "../providers/auth-provider";
 import PWABadge from "../shared/components/pwa-badge/PWABadge";
 
@@ -13,7 +13,7 @@ interface MyRouterContext {
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: () => (
     <>
-      <div className="p-2 flex gap-2 text-lg border-b">
+      {/* <div className="p-2 flex gap-2 text-lg border-b">
         <Link
           to="/files"
           activeProps={{
@@ -59,12 +59,12 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         >
           About
         </Link>{" "}
-      </div>
+      </div> */}
       <Outlet />
 
       <PWABadge />
-      <TanStackRouterDevtools />
-      <ReactQueryDevtools buttonPosition="bottom-right" />
+      {/* <TanStackRouterDevtools /> */}
+      {/* <ReactQueryDevtools buttonPosition="bottom-right" /> */}
     </>
   ),
 });

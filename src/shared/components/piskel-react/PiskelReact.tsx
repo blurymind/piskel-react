@@ -49,7 +49,7 @@ export const PiskelReact = ({
   piskelAppPath = "piskel/dest/prod/index.html",
   ref,
   piskelFile = sprites.sonic,
-  hideHeader = false,
+  hideHeader = true,
 }) => {
   const piskelRef = useRef(null);
 
@@ -86,7 +86,6 @@ export const PiskelReact = ({
   const onLoadPiskelApp = () => {
     const innerDoc = piskelRef.current?.contentDocument || piskelRef.current?.contentWindow.document;
     innerDoc?.getElementById("dialog-container-wrapper")?.remove();
-
     innerDoc?.querySelector(".new-piskel-desktop")?.remove();
     if (hideHeader) {
       const wrapper = innerDoc.getElementById("main-wrapper");

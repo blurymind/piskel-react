@@ -53,7 +53,8 @@ function RouteComponent() {
   const piskelRef = useRef(null);
   return (
     <>
-      <button
+ 
+      {/* <button
         className="btn"
         onClick={() =>
           // setSprite(sprites.mario)
@@ -71,7 +72,7 @@ function RouteComponent() {
         }
       >
         megaman
-      </button>
+      </button> */}
       <PiskelReact piskelFile={sprite} ref={piskelRef} />
     </>
   );

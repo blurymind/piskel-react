@@ -3,7 +3,7 @@
 @import "@cubone/react-file-manager/dist/style.css";
 
 body > div {
-  height: 90vh !important;
+  height: 99vh !important;
   /*background: #245e8f;*/
   /*color: wheat;*/
 }
