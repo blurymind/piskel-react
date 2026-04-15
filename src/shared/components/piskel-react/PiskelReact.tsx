@@ -53,7 +53,7 @@ export const PiskelReact = ({
   hideHeader = true,
 }) => {
   const [currentName, setCurrentName] = useLocalStorage("currentPiskelName", "")
-  const [piskels, setPiskels] = useLocalStorage("piskels", {mario: {label: "mario", src: sprites.mario}});
+  const [piskels, setPiskels] = useLocalStorage("piskels", {mario: {label: sprites.mario.piskel.name, src: sprites.mario}});
   const currentPiskel = piskels[currentName]
 
   const piskelRef = useRef(null);
