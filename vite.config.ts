@@ -29,7 +29,7 @@ export default defineConfig( ({command, isPreview}) => ({
         short_name: "piskel",
         description: "Piskel plus. Run piskel without the adds and with nices UX wrapped by react",
         theme_color: "#000000",
-        start_url: "piskel-react"
+        start_url: command === 'serve' ? '/': 'piskel-react',
       },
 
       workbox: {
