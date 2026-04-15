@@ -53,8 +53,7 @@ export const PiskelReact = ({
   hideHeader = true,
 }) => {
   const [currentName, setCurrentName] = useLocalStorage("currentPiskelName", "")
-  const [piskels, setPiskels] = useLocalStorage("piskels", {file1: {label: "file1", src: "err"}});
-  const [editedPiskel, setEditedPiskel] = useLocalStorage("editedPiskel", sprites.mario);
+  const [piskels, setPiskels] = useLocalStorage("piskels", {mario: {label: "mario", src: sprites.mario}});
   const piskelRef = useRef(null);
 
   const getPiskel = () => piskelRef.current?.contentWindow?.pskl;
@@ -68,6 +67,7 @@ export const PiskelReact = ({
     const descriptor = new pskl.model.piskel.Descriptor(piskel.name, piskel.description, true);
     pskl.utils.serialization.Deserializer.deserialize(sprite, function (piskel) {
       piskel.setDescriptor(descriptor);
+   
       app.piskelController.setPiskel(piskel);
       // app.previewController.previewActionsController.piskelController.setFPS(fps);
     });
@@ -83,13 +83,13 @@ export const PiskelReact = ({
     const piskelState = pskl.utils.serialization.Serializer.serialize(piskelData)
  
     const piskelDataParsed = JSON.parse(piskelState)
-    setEditedPiskel(piskelDataParsed)
     setPiskels(prev=> ({...prev,
       [piskelDataParsed.piskel.name]: {
         label: piskelDataParsed.piskel.name,
         src: piskelDataParsed
       }
     }))
+    console.log("saved", {piskelDataParsed})
   }
 
   useEffect(() => {
@@ -98,11 +98,6 @@ export const PiskelReact = ({
       loadSprite(piskelFile);
     } else {
       // loadSprite(editedPiskel);
-    }
-    document.addEventListener("pointerout", onSavePiskel)
-    return () => {
-      document.removeEventListener("pointerout", onSavePiskel)
-      onSavePiskel()
     }
   }, []);
   
@@ -126,8 +121,7 @@ export const PiskelReact = ({
       }
       innerDoc?.querySelector(".fake-piskelapp-header")?.remove();
     }
-    console.log({editedPiskel, piskelFile})
-    loadSprite(editedPiskel ?? piskelFile ?? sprites.megaman);
+    loadSprite(piskels[currentName]?.src ?? piskelFile ?? sprites.megaman);
   };
  
 const createEmptyAnimation = () => {
@@ -161,7 +155,7 @@ const createEmptyAnimation = () => {
     onSavePiskel()
     setTimeout(()=> {
       loadSprite(item.src)
-    }, 400)
+    }, 100)
 
   }
 
@@ -189,15 +183,15 @@ const createEmptyAnimation = () => {
 
   return (
     <div style={{ height: "100%" }}>
-      <div className="absolute top-10 rounded-sm w-20 overflow-hidden h-50 bg-gray-600/20" >
-        <div className="p-2 w-full bg-gray-700" style={{whiteSpace: "nowrap"}} title={currentName}>{currentName}</div>
+      <div className="absolute top-0 p-2 bg-gray-700 w-23" style={{whiteSpace: "nowrap"}} title={currentName}>{currentName}</div>
+
+      <div className="absolute top-20 rounded-sm w-20 overflow-hidden h-50 bg-gray-600/20" >
         <div className="flex flex-1 gap-3 m-2 flex-col">
           <button className="hover:bg-gray-500" onClick={onSavePiskel}>Save</button>
           <button className="hover:bg-gray-500" onClick={createEmptyAnimation}>New</button>
         </div>
-
       </div>
-      <div className="absolute m-2"> 
+      <div className="absolute top-10 m-2"> 
           <Menu selected={currentName} onClose={onCloseFile} onSelect={onSelectFile} label="Open" items={Object.values(piskels)} /> 
       </div>
 
