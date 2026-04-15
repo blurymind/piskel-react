@@ -54,8 +54,9 @@ export const PiskelReact = ({
 }) => {
   const [currentName, setCurrentName] = useLocalStorage("currentPiskelName", "")
   const [piskels, setPiskels] = useLocalStorage("piskels", {mario: {label: "mario", src: sprites.mario}});
-  const piskelRef = useRef(null);
+  const currentPiskel = piskels[currentName]
 
+  const piskelRef = useRef(null);
   const getPiskel = () => piskelRef.current?.contentWindow?.pskl;
  
   const loadSprite = useCallback((sprite) => {
@@ -121,7 +122,7 @@ export const PiskelReact = ({
       }
       innerDoc?.querySelector(".fake-piskelapp-header")?.remove();
     }
-    loadSprite(piskels[currentName]?.src ?? piskelFile ?? sprites.megaman);
+    loadSprite(currentPiskel?.src ?? piskelFile ?? sprites.megaman);
   };
  
 const createEmptyAnimation = () => {
@@ -131,20 +132,7 @@ const createEmptyAnimation = () => {
     alert("Cant have two " + name)
     return
   }
-  const sprite = {
-    modelVersion: 2,
-    piskel: {
-      name,
-      description: '',
-      fps: 12,// todo
-      height: 256,
-      width: 256,
-      layers: [
-        '{"name":"Layer 1","frameCount":1,"base64PNG":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAAAAYLlVAAAAOUlEQVR42u3OIQEAAAACIP1/2hkWWEBzVgEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAYF3YDicAEE8VTiYAAAAAElFTkSuQmCC"}',
-      ],
-    },
-  };
-  loadSprite(sprite)
+  loadSprite(sprites.mario)
   const pskl = getPiskel();
   if (!pskl) return;
      pskl.app.settingsController.settingsContainer
@@ -185,14 +173,56 @@ const createEmptyAnimation = () => {
     }, 100)
   }
 
+  const onCopyToClip = () => {
+      navigator.clipboard.writeText(JSON.stringify(currentPiskel.src)).then(
+    () => {
+      console.log("OK copied")
+    },
+    () => {
+      alert("failed to copy")
+    },
+   );
+  }
+  const onPasteClip = () => {
+ 
+  navigator.clipboard
+    .readText()
+    .then((clipText) => {
+      try {
+        const data = JSON.parse(clipText)
+        console.log({data})
+        const promptName = prompt("What should we call the pasted sprite? ", data.piskel.name)
+        if(promptName) {
+          if(promptName in piskels) {
+            alert("name is already taken")
+            return;
+          }
+          data.piskel.name = promptName
+          setPiskels(prev=> ({...prev,
+            [promptName]: {
+              label: promptName,
+              src: data
+            }
+          }))
+        }
+        // alert("todo")
+        
+      } catch(e) {
+        console.error(e)
+      }
+    });
+ 
+  }
   return (
     <div style={{ height: "100%" }}>
-      <div className="absolute top-0 p-2 bg-gray-700 w-23" style={{whiteSpace: "nowrap"}} title={currentName}>{currentName}</div>
+      <div className="absolute top-0 p-2 bg-gray-700 w-23 overflow-hidden" style={{whiteSpace: "nowrap"}} title={currentName}>{currentName}</div>
 
       <div className="absolute top-20 rounded-sm w-20 overflow-hidden h-50 bg-gray-600/20" >
         <div className="flex flex-1 gap-3 m-2 flex-col">
           <button className="hover:bg-gray-500" onClick={onSavePiskel}>Save</button>
           <button className="hover:bg-gray-500" onClick={createEmptyAnimation}>New</button>
+          <button className="hover:bg-gray-500" onClick={onCopyToClip}>Copy</button>
+          <button className="hover:bg-gray-500" onClick={onPasteClip}>Paste</button>
         </div>
       </div>
       <div className="absolute top-10 m-2"> 
