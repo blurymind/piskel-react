@@ -127,6 +127,10 @@ export const PiskelReact = ({
 const createEmptyAnimation = () => {
   const name = prompt("Create new file? ", "newPiskel")
   if(!name) return;
+  if(name === currentName){
+    alert("Cant have two " + name)
+    return
+  }
   const sprite = {
     modelVersion: 2,
     piskel: {
@@ -192,7 +196,7 @@ const createEmptyAnimation = () => {
         </div>
       </div>
       <div className="absolute top-10 m-2"> 
-          <Menu selected={currentName} onClose={onCloseFile} onSelect={onSelectFile} label="Open" items={Object.values(piskels)} /> 
+          <Menu selected={currentName} onClose={onCloseFile} onSelect={onSelectFile} label={`Open (${Object.values(piskels).length})`} items={Object.values(piskels)} /> 
       </div>
 
       <iframe
