@@ -2,7 +2,7 @@ import { memo, useCallback, useEffect, useImperativeHandle, useRef, useState } f
 
 import "./index.css";
 import { useLocalStorage } from "@uidotdev/usehooks";
-
+import Menu from "../Menu"
 const sprites = {
   megaman: {
     modelVersion: 2,
@@ -52,7 +52,9 @@ export const PiskelReact = ({
   piskelFile,
   hideHeader = true,
 }) => {
-    const [editedPiskel, setEditedPiskel] = useLocalStorage("editedPiskel", sprites.mario);
+  const [currentName, setCurrentName] = useLocalStorage("currentPiskelName", "")
+  const [piskels, setPiskels] = useLocalStorage("piskels", {file1: {label: "file1", src: "err"}});
+  const [editedPiskel, setEditedPiskel] = useLocalStorage("editedPiskel", sprites.mario);
   const piskelRef = useRef(null);
 
   const getPiskel = () => piskelRef.current?.contentWindow?.pskl;
@@ -69,6 +71,7 @@ export const PiskelReact = ({
       app.piskelController.setPiskel(piskel);
       // app.previewController.previewActionsController.piskelController.setFPS(fps);
     });
+    setCurrentName(sprite.piskel.name)
     console.log({ app, fps });
   }, []);
 
@@ -78,8 +81,15 @@ export const PiskelReact = ({
     if (!pskl) return;
     const piskelData = pskl.app.piskelController.getPiskel();
     const piskelState = pskl.utils.serialization.Serializer.serialize(piskelData)
-    console.log({save:JSON.parse(piskelState)})
-    setEditedPiskel(JSON.parse(piskelState))
+ 
+    const piskelDataParsed = JSON.parse(piskelState)
+    setEditedPiskel(piskelDataParsed)
+    setPiskels(prev=> ({...prev,
+      [piskelDataParsed.piskel.name]: {
+        label: piskelDataParsed.piskel.name,
+        src: piskelDataParsed
+      }
+    }))
   }
 
   useEffect(() => {
@@ -119,15 +129,76 @@ export const PiskelReact = ({
     console.log({editedPiskel, piskelFile})
     loadSprite(editedPiskel ?? piskelFile ?? sprites.megaman);
   };
+ 
+const createEmptyAnimation = () => {
+  const name = prompt("Create new file? ", "newPiskel")
+  if(!name) return;
+  const sprite = {
+    modelVersion: 2,
+    piskel: {
+      name,
+      description: '',
+      fps: 12,// todo
+      height: 256,
+      width: 256,
+      layers: [
+        '{"name":"Layer 1","frameCount":1,"base64PNG":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAAAAYLlVAAAAOUlEQVR42u3OIQEAAAACIP1/2hkWWEBzVgEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAYF3YDicAEE8VTiYAAAAAElFTkSuQmCC"}',
+      ],
+    },
+  };
+  loadSprite(sprite)
+  const pskl = getPiskel();
+  if (!pskl) return;
+     pskl.app.settingsController.settingsContainer
+      .getElementsByClassName('tool-icon  icon-settings-resize-white')[0]
+     .click(); // call resize window
+    pskl.app.settingsController.settingsContainer
+      .getElementsByClassName('textfield resize-size-field')[0]
+      .focus();
+  };
 
-  // todo onSave callback
-  // todo changes indicator
-  // todo trigger save via ref, expose piskel's api to parent
-  // todo move piskel zoom to state and persist it?
-  // todo onSave callback is needed to get the data out and use it elsewhere
+  const onSelectFile = item => {
+    onSavePiskel()
+    loadSprite(item.src)
+  }
+
+  const onCloseFile = (sprite) => {
+    const confirmation = confirm("This will close " + sprite.label)
+    if(!confirmation) return;
+    if(!(sprite.label in piskels)) return
+
+    const nextPiskels  = {...piskels}
+    delete nextPiskels[sprite.label]
+
+    const piskelsVals = Object.values(nextPiskels)
+    
+    if(piskelsVals.length === 0) {
+      createEmptyAnimation()
+      return
+    }
+    const next = piskelsVals[0]
+    if(!next) return;
+    loadSprite(next.src);
+    setTimeout(()=> {
+      setPiskels(nextPiskels)
+    }, 100)
+  }
+
   return (
     <div style={{ height: "100%" }}>
-      <div className="absolute" onClick={onSavePiskel}>save</div>
+
+      <div className="absolute top-10 rounded-sm w-20 hover:w-40 overflow-hidden h-50 bg-gray-600" >
+        <div className="p-2 w-full bg-gray-700" style={{whiteSpace: "nowrap"}}>{currentName}</div>
+        <div className="flex flex-1 gap-3 m-2 flex-col">
+          <button className="hover:bg-gray-500" onClick={createEmptyAnimation}>New</button>
+          <button className="hover:bg-gray-500" onClick={onSavePiskel}>Save</button> 
+        </div>
+
+      </div>
+      <div className="absolute m-2"> 
+          <Menu onClose={onCloseFile} onSelect={onSelectFile} label="Open" items={Object.values(piskels)} /> 
+      </div>
+
       <iframe
         width="100%"
         height="100%"
