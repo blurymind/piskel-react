@@ -85,16 +85,29 @@ export const usePiskel = ({piskelRef}) => {
         loadPSprite(piskelData)
     };
 
-    const loadZippedImageFramesIntoPiskel = (zipData, name, cb) => {
-        const frames = zipData.files;
+    const loadZippedImageFramesIntoPiskel = ({imageData, maxWidth,maxHeight}, name) => {
         const pskl = getPiskel();
-        createNewPiskel(name)
-        const imageData = [];
-        let maxWidth = -1;
-        let maxHeight = -1;
-        let hasAlreadyLoadedOrErrored = false
-    
-         Promise.all(
+        const piskelFile = pskl.service.ImportService.prototype.createPiskelFromImages_(
+            imageData,
+            name,
+            maxWidth,
+            maxHeight,
+            false
+        );
+        const piskelController = pskl.app.piskelController;
+        // cb(piskelFile)
+        piskelController.setPiskel(piskelFile, {});
+    }
+    return {loadPSprite, getPiskel, savePiskel, initPiskelApp, createNewPiskel, 
+        loadZippedImageFramesIntoPiskel, getPiskelData, openSettings}
+}
+
+export const getImagesFromZip = (zipData)=> {
+      const frames = zipData.files;
+      const imageData = [] 
+      let maxWidth = -1;
+      let maxHeight = -1
+    return Promise.all(
             Object.keys(frames)
             .filter(key=> key.toLocaleLowerCase().endsWith(".png"))
             .sort()
@@ -103,15 +116,13 @@ export const usePiskel = ({piskelRef}) => {
                 const resource = frames[key]
                 const image = new Image();
                 image.onload = () => {
-                    if (hasAlreadyLoadedOrErrored) return;
+        
                     imageData.push(image);
                     maxWidth = Math.max(image.width, maxWidth);
                     maxHeight = Math.max(image.height, maxHeight);
                     resolve(key);
                 };
                 image.onerror = event => {
-                    if (hasAlreadyLoadedOrErrored) return;
-                    hasAlreadyLoadedOrErrored = true;
                     console.error('Unable to load ', resource, event);
                     resolve(key);
                 };
@@ -123,32 +134,14 @@ export const usePiskel = ({piskelRef}) => {
                         image.src = imageUrl;
                     })
                 } catch (error) {
-                    if (hasAlreadyLoadedOrErrored) return;
-                    hasAlreadyLoadedOrErrored = true;
-
                     // Unable to load the image, ignore it.
                     console.error('Unable to load ', resource, error);
                     resolve(key);
                 }
                 })
             })
-        ).then(()=> {
-            const piskelFile = pskl.service.ImportService.prototype.createPiskelFromImages_(
-                imageData,
-                name,
-                maxWidth,
-                maxHeight,
-                false
-            );
-            const piskelController = pskl.app.piskelController;
-            cb(piskelFile)
-            piskelController.setPiskel(piskelFile, {});
-        })
-    }
-    return {loadPSprite, getPiskel, savePiskel, initPiskelApp, createNewPiskel, 
-        loadZippedImageFramesIntoPiskel, getPiskelData, openSettings}
+        ).then(()=> ({imageData, maxWidth,maxHeight}))
 }
-
 export const sprites = {
   sonic: {
     modelVersion: 2,

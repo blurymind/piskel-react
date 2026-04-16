@@ -9,7 +9,7 @@ import { FileUploader } from "react-drag-drop-files";
 
 const fileTypes = ["ZIP"];
 
-import {usePiskel, sprites} from "./utils"
+import {usePiskel, sprites, getImagesFromZip} from "./utils"
 // copy of src/shared/components/piskel-react/piskel/dest/prod/index.html
 export const PiskelReact = ({
   piskelAppPath = "piskel/dest/prod/index.html",
@@ -17,6 +17,8 @@ export const PiskelReact = ({
   piskelFile,
   hideHeader = true,
 }) => {
+  const [newFileName, setNewFileName] = useState("")
+  const [draggedFile, setDraggedFile] = useState(null)
   const [isDraggingFile, setIsDraggingFile] = useState(false)
   const [currentName, setCurrentName] = useLocalStorage("currentPiskelName", "")
   const [piskels, setPiskels] = useLocalStorage("piskels", {mario: {label: sprites.mario.piskel.name, src: sprites.mario}});
@@ -49,12 +51,12 @@ export const PiskelReact = ({
     } else {
       // loadSprite(editedPiskel);
     }
-    const onDrag = e => {
+    const onDragEnd = e => {
       console.log("DRAG", e)
     }
-    window.addEventListener("dragover", onDrag)
+    window.addEventListener("mouseup", onDragEnd)
     return ()=> {
-      window.removeEventListener("dragover", onDrag)
+      window.removeEventListener("mouseup", onDragEnd)
     }
   }, []);
   
@@ -131,6 +133,7 @@ const createEmptyAnimation = () => {
       try {
         const data = JSON.parse(clipText)
         console.log({data})
+        // todo remove, it pauses the window
         const promptName = prompt("What should we call the pasted sprite? ", data.piskel.name)
         if(promptName) {
           if(promptName in piskels) {
@@ -154,29 +157,37 @@ const createEmptyAnimation = () => {
  
   }
 
+  const onConfirmDraggedFile = ()=> {
+    const newName = 'selectedFileName'// todo put in state
+    loadZippedImageFramesIntoPiskel(draggedFile,newName)
+           setCurrentName(newFileName)
+           // todo
+            // setPiskels(prev=> ({...prev,
+            //       [newName]: {
+            //         label: newFileName,
+            //         src: data
+            //       }
+            // }))
+            setDraggedFile(null)
+            setIsDraggingFile(false)
+  }
 //  todo https://stuk.github.io/jszip/documentation/api_jszip/load_async.html
   const handleDropFile = (inFile) => {
     const reader = new FileReader();
     const fileName = inFile.name.split(".")[0]
-    const selectedFileName = prompt("This will unzip the frames and create a file with this name ", fileName)
-    if(!selectedFileName) {
-      setIsDraggingFile(false)
-      return;
-    }
-    const cb = (data) => {
-      setCurrentName(selectedFileName)
-      setPiskels(prev=> ({...prev,
-            [selectedFileName]: {
-              label: selectedFileName,
-              src: data
-            }
-      }))
-      
-    }
+
     reader.addEventListener("load", () => {
       const zip = new Jszip()
       zip.loadAsync(reader.result.split(",")[1], {base64: true}).then(zipData=>{
-        loadZippedImageFramesIntoPiskel(zipData, selectedFileName, cb)
+         getImagesFromZip(zipData).then(({imageData, maxWidth,maxHeight})  => {
+          setNewFileName(fileName)
+          if(imageData.length ===0)return;
+          setDraggedFile({imageData,
+            maxWidth,
+            maxHeight,})
+          console.log({imageData})
+
+        })
       })
     });
     if (inFile) {
@@ -191,7 +202,7 @@ const createEmptyAnimation = () => {
       onDragEnd={()=>setIsDraggingFile(false)}
       onDragLeave={()=>setIsDraggingFile(false)}
       onPointerUp={()=>setIsDraggingFile(false)}
-      className="bg-amber-200 w-full flex-1 flex"
+      onDragExit={()=>setIsDraggingFile(false)}
     >
       {/* <div className="absolute bottom-10 right-5 p-2 bg-gray-700 w-50 overflow-hidden" style={{whiteSpace: "nowrap"}} title={currentName}>{currentName}</div> */}
 
@@ -203,11 +214,26 @@ const createEmptyAnimation = () => {
           <button className="hover:bg-gray-500" onClick={onPasteClip}>Paste</button>
         </div>
       </div>
+ 
       <div className="absolute left-0 top-46 bg-gray-900 overflow-hidden">
          {isDraggingFile ? (
-        <FileUploader classes="" handleChange={handleDropFile} name="file" types={fileTypes} label="Drop zip with pngs" uploadedLabel="Drop zip"  />
+        <FileUploader 
+        classes="w-200 min-h-100" 
+        handleChange={handleDropFile}
+         name="file" types={fileTypes}
+         onDrop={()=>setIsDraggingFile(false)}
+         label="Drop zip with pngs" 
+         uploadedLabel="Drop zip"
+           />
         ): <div className="bg-gray-600 opacity-40 hover:opacity-80 h-10 w-20 p-1" style={{whiteSpace: "nowrap"}} 
-        title="Drop a zip file containing png animation frames">[Drop zip]</div>}
+        title="Drop a zip file containing png animation frames">[Drop zip]</div>
+        }
+        {draggedFile && <div>
+          <input onChange={e=>{
+          if (e.key === "Enter") {
+onConfirmDraggedFile()
+          }
+        }} value={newFileName} onChange={e=> setNewFileName(e.target.value)}></input><img src={draggedFile?.imageData?.[0]?.src}></img> <button onClick={onConfirmDraggedFile}>Open</button><button onClick={()=>setDraggedFile(null)}>cancel</button></div>}
       </div>
       <div className="absolute top-0 m-2"> 
           <Menu selected={currentName} onClose={onCloseFile} onSelect={onSelectFile} label={`Open (${Object.values(piskels).length})`} items={Object.values(piskels)} /> 
