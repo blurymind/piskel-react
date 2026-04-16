@@ -22,7 +22,7 @@ export const PiskelReact = ({
   const currentPiskel = piskels[currentName]
 
   const piskelRef = useRef(null);
-  const {getPiskel, loadPSprite, savePiskel, createNewPiskel, initPiskelApp} = usePiskel({piskelRef})
+  const {getPiskel, loadPSprite, savePiskel, createNewPiskel, initPiskelApp, getPiskelData} = usePiskel({piskelRef})
  
   const loadSprite = useCallback((sprite) => {
     loadPSprite(sprite)
@@ -70,6 +70,7 @@ const createEmptyAnimation = () => {
     return
   }
   createNewPiskel(name)
+  setCurrentName(name)
   };
 
   const onSelectFile = item => {
@@ -103,17 +104,17 @@ const createEmptyAnimation = () => {
   }
 
   const onCopyToClip = () => {
-      navigator.clipboard.writeText(JSON.stringify(currentPiskel.src)).then(
+      navigator.clipboard.writeText(JSON.stringify(getPiskelData())).then(
     () => {
-      console.log("OK copied")
+      console.log(getPiskelData())
     },
     () => {
       alert("failed to copy")
     },
    );
   }
+
   const onPasteClip = () => {
- 
   navigator.clipboard
     .readText()
     .then((clipText) => {

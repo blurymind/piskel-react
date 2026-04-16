@@ -1,5 +1,22 @@
 import { useCallback } from "react";
 
+//https://blurymind.github.io/piskel-react
+export const getNewPiskelTemplate = (name: string) => (
+{
+    "modelVersion": 2,
+    "piskel": {
+        name,
+        "description": "Created in https://blurymind.github.io/piskel-react",
+        "fps": 1,
+        "height": 32,
+        "width": 32,
+        "layers": [
+            "{\"name\":\"Layer 1\",\"opacity\":1,\"frameCount\":1,\"chunks\":[{\"layout\":[[0]],\"base64PNG\":\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAqCAYAAADBNhlmAAAAAXNSR0IArs4c6QAAAFpJREFUWEft0rENADAIBDHYf2mGcENx6V9Czu08f/v8vulA/aEEE1QB3ddggiqg+xpMUAV0X4MJqoDuazBBFdB9DSaoArqvwQRVQPc1mKAK6L4GE1QB3degCh5SbwArS8HI/AAAAABJRU5ErkJggg==\"}]}"
+        ],
+        "hiddenFrames": []
+    }
+}
+)
 export const usePiskel = ({piskelRef}) => {
     const getPiskel = () => piskelRef.current?.contentWindow?.pskl;
 
@@ -18,6 +35,15 @@ export const usePiskel = ({piskelRef}) => {
         });
     }, [])
    
+    const getPiskelData = () => {
+        const pskl = getPiskel();
+        if (!pskl) return {data: null, name: ""};
+        const piskelData = pskl.app.piskelController.getPiskel();
+        const piskelState = pskl.utils.serialization.Serializer.serialize(piskelData)
+    
+        const piskelDataParsed = JSON.parse(piskelState)
+        return piskelDataParsed
+    }
     const savePiskel = () => {
         const pskl = getPiskel();
         if (!pskl) return {data: null, name: ""};
@@ -43,7 +69,7 @@ export const usePiskel = ({piskelRef}) => {
         }
      };
     const createNewPiskel = (name) => {
-        const piskelData = {...sprites.mario, piskel: {...sprites.mario.piskel, name}}
+        const piskelData = getNewPiskelTemplate(name)
         loadPSprite(piskelData)
         const pskl = getPiskel();
         if (!pskl) return;
@@ -54,7 +80,7 @@ export const usePiskel = ({piskelRef}) => {
             .getElementsByClassName('textfield resize-size-field')[0]
             .focus();
         };
-    return {loadPSprite, getPiskel, savePiskel, initPiskelApp, createNewPiskel}
+    return {loadPSprite, getPiskel, savePiskel, initPiskelApp, createNewPiskel, getPiskelData}
 }
 
 export const sprites = {
