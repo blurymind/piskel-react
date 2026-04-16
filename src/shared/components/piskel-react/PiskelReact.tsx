@@ -4,7 +4,7 @@ import "./index.css";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import Menu from "../Menu"
 
-const zip = new Jszip()
+
 import { FileUploader } from "react-drag-drop-files";
 
 const fileTypes = ["ZIP"];
@@ -17,12 +17,14 @@ export const PiskelReact = ({
   piskelFile,
   hideHeader = true,
 }) => {
+  const [isDraggingFile, setIsDraggingFile] = useState(false)
   const [currentName, setCurrentName] = useLocalStorage("currentPiskelName", "")
   const [piskels, setPiskels] = useLocalStorage("piskels", {mario: {label: sprites.mario.piskel.name, src: sprites.mario}});
   const currentPiskel = piskels[currentName]
 
   const piskelRef = useRef(null);
-  const {getPiskel, loadPSprite, savePiskel, createNewPiskel, initPiskelApp, getPiskelData} = usePiskel({piskelRef})
+  const {getPiskel, loadPSprite, savePiskel, createNewPiskel,openSettings,
+     initPiskelApp, getPiskelData, loadZippedImageFramesIntoPiskel} = usePiskel({piskelRef})
  
   const loadSprite = useCallback((sprite) => {
     loadPSprite(sprite)
@@ -47,6 +49,13 @@ export const PiskelReact = ({
     } else {
       // loadSprite(editedPiskel);
     }
+    const onDrag = e => {
+      console.log("DRAG", e)
+    }
+    window.addEventListener("dragover", onDrag)
+    return ()=> {
+      window.removeEventListener("dragover", onDrag)
+    }
   }, []);
   
 
@@ -70,6 +79,7 @@ const createEmptyAnimation = () => {
     return
   }
   createNewPiskel(name)
+  openSettings()
   setCurrentName(name)
   };
 
@@ -146,36 +156,46 @@ const createEmptyAnimation = () => {
 
 //  todo https://stuk.github.io/jszip/documentation/api_jszip/load_async.html
   const handleDropFile = (inFile) => {
-    console.log(file);
     const reader = new FileReader();
+    const fileName = inFile.name.split(".")[0]
+    const selectedFileName = prompt("This will unzip the frames and create a file with this name ", fileName)
+    if(!selectedFileName) {
+      setIsDraggingFile(false)
+      return;
+    }
+    const cb = (data) => {
+      setCurrentName(selectedFileName)
+      setPiskels(prev=> ({...prev,
+            [selectedFileName]: {
+              label: selectedFileName,
+              src: data
+            }
+      }))
+      
+    }
     reader.addEventListener("load", () => {
-      console.log("LOADED" , reader)
-      // convert image file to base64 string
-      // preview.src = reader.result;
-      //data:application/zip;base64,UEsDB
+      const zip = new Jszip()
       zip.loadAsync(reader.result.split(",")[1], {base64: true}).then(zipData=>{
-        console.log({zipData})
-        const filesInZip = zipData.files;
-        zipData.files.forEach(frame=>{
-          console.log({frame, asData: frame.asText()})
-        })
+        loadZippedImageFramesIntoPiskel(zipData, selectedFileName, cb)
       })
     });
     if (inFile) {
       reader.readAsDataURL(inFile);
     }
+    setIsDraggingFile(false)
   }
- 
+
   return (
-    <div style={{ height: "100%" }}>
-      <div className="absolute left-20 bg-amber-200" onDrag={console.log}>
-        <FileUploader handleChange={handleDropFile} name="file" types={fileTypes} />
+    <div style={{ height: "100%", width: "100%" }} 
+      onDragEnter={()=>setIsDraggingFile(true)} 
+      onDragEnd={()=>setIsDraggingFile(false)}
+      onDragLeave={()=>setIsDraggingFile(false)}
+      onPointerUp={()=>setIsDraggingFile(false)}
+      className="bg-amber-200 w-full flex-1 flex"
+    >
+      {/* <div className="absolute bottom-10 right-5 p-2 bg-gray-700 w-50 overflow-hidden" style={{whiteSpace: "nowrap"}} title={currentName}>{currentName}</div> */}
 
-      </div>
-
-      <div className="absolute top-0 p-2 bg-gray-700 w-23 overflow-hidden" style={{whiteSpace: "nowrap"}} title={currentName}>{currentName}</div>
-
-      <div className="absolute top-20 rounded-sm w-20 overflow-hidden h-50 bg-gray-600/20" >
+      <div className="absolute top-10 rounded-sm w-20 overflow-hidden h-50 bg-gray-600/20" >
         <div className="flex flex-1 gap-3 m-2 flex-col">
           <button className="hover:bg-gray-500" onClick={onSavePiskel}>Save</button>
           <button className="hover:bg-gray-500" onClick={createEmptyAnimation}>New</button>
@@ -183,10 +203,16 @@ const createEmptyAnimation = () => {
           <button className="hover:bg-gray-500" onClick={onPasteClip}>Paste</button>
         </div>
       </div>
-      <div className="absolute top-10 m-2"> 
+      <div className="absolute left-0 top-46 bg-gray-900 overflow-hidden">
+         {isDraggingFile ? (
+        <FileUploader classes="" handleChange={handleDropFile} name="file" types={fileTypes} label="Drop zip with pngs" uploadedLabel="Drop zip"  />
+        ): <div className="bg-gray-600 opacity-40 hover:opacity-80 h-10 w-20 p-1" style={{whiteSpace: "nowrap"}} 
+        title="Drop a zip file containing png animation frames">[Drop zip]</div>}
+      </div>
+      <div className="absolute top-0 m-2"> 
           <Menu selected={currentName} onClose={onCloseFile} onSelect={onSelectFile} label={`Open (${Object.values(piskels).length})`} items={Object.values(piskels)} /> 
       </div>
-
+    
       <iframe
         width="100%"
         height="100%"
@@ -194,6 +220,9 @@ const createEmptyAnimation = () => {
         className="editor-frame"
         src={piskelAppPath}
         onLoad={onLoadPiskelApp}
+            onDragEnter={()=>setIsDraggingFile(true)} 
+    onDragEnd={()=>setIsDraggingFile(false)}
+    onDragLeave={()=>setIsDraggingFile(false)}
       />
     </div>
   );

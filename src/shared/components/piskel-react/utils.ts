@@ -68,19 +68,85 @@ export const usePiskel = ({piskelRef}) => {
         innerDoc?.querySelector(".fake-piskelapp-header")?.remove();
         }
      };
+     const openSettings = () => {
+        setTimeout(()=> {
+            const pskl = getPiskel();
+            if (!pskl) return;
+            pskl.app.settingsController.settingsContainer
+                .getElementsByClassName('tool-icon  icon-settings-resize-white')[0]
+                .click(); // call resize window
+            pskl.app.settingsController.settingsContainer
+                .getElementsByClassName('textfield resize-size-field')[0]
+                .focus();    
+        })
+     }
     const createNewPiskel = (name) => {
         const piskelData = getNewPiskelTemplate(name)
         loadPSprite(piskelData)
+    };
+
+    const loadZippedImageFramesIntoPiskel = (zipData, name, cb) => {
+        const frames = zipData.files;
         const pskl = getPiskel();
-        if (!pskl) return;
-            pskl.app.settingsController.settingsContainer
-            .getElementsByClassName('tool-icon  icon-settings-resize-white')[0]
-            .click(); // call resize window
-            pskl.app.settingsController.settingsContainer
-            .getElementsByClassName('textfield resize-size-field')[0]
-            .focus();
-        };
-    return {loadPSprite, getPiskel, savePiskel, initPiskelApp, createNewPiskel, getPiskelData}
+        createNewPiskel(name)
+        const imageData = [];
+        let maxWidth = -1;
+        let maxHeight = -1;
+        let hasAlreadyLoadedOrErrored = false
+    
+         Promise.all(
+            Object.keys(frames)
+            .filter(key=> key.toLocaleLowerCase().endsWith(".png"))
+            .sort()
+            .map(key => {
+               return new Promise((resolve)=> {
+                const resource = frames[key]
+                const image = new Image();
+                image.onload = () => {
+                    if (hasAlreadyLoadedOrErrored) return;
+                    imageData.push(image);
+                    maxWidth = Math.max(image.width, maxWidth);
+                    maxHeight = Math.max(image.height, maxHeight);
+                    resolve(key);
+                };
+                image.onerror = event => {
+                    if (hasAlreadyLoadedOrErrored) return;
+                    hasAlreadyLoadedOrErrored = true;
+                    console.error('Unable to load ', resource, event);
+                    resolve(key);
+                };
+
+                try {
+                    resource.async("blob").then(blob=> {
+                        const imageUrl = URL.createObjectURL(blob)
+                        console.log({blob, imageUrl})
+                        image.src = imageUrl;
+                    })
+                } catch (error) {
+                    if (hasAlreadyLoadedOrErrored) return;
+                    hasAlreadyLoadedOrErrored = true;
+
+                    // Unable to load the image, ignore it.
+                    console.error('Unable to load ', resource, error);
+                    resolve(key);
+                }
+                })
+            })
+        ).then(()=> {
+            const piskelFile = pskl.service.ImportService.prototype.createPiskelFromImages_(
+                imageData,
+                name,
+                maxWidth,
+                maxHeight,
+                false
+            );
+            const piskelController = pskl.app.piskelController;
+            cb(piskelFile)
+            piskelController.setPiskel(piskelFile, {});
+        })
+    }
+    return {loadPSprite, getPiskel, savePiskel, initPiskelApp, createNewPiskel, 
+        loadZippedImageFramesIntoPiskel, getPiskelData, openSettings}
 }
 
 export const sprites = {
@@ -111,3 +177,6 @@ export const sprites = {
     },
   },
 };
+
+
+ 
