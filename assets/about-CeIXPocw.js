@@ -1,1 +1,0 @@
-import{j as t}from"./index-D_vteXYz.js";const o=function(){return t.jsx("div",{className:"flex flex-1 h-full w-full",children:"iframe testing ground for integrating other webapps with a react frame"})};export{o as component};
