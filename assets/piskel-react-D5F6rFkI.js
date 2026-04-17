@@ -1,0 +1,1 @@
+import{r as e,j as t}from"./index-D_vteXYz.js";import{P as n}from"./PiskelReact-C8UM0PON.js";import"./index-B6AXmIoJ.js";const a=function(){const[o,p]=e.useState(null),s=e.useRef(null);return t.jsx(t.Fragment,{children:t.jsx(n,{piskelFile:o,ref:s})})};export{a as component};
