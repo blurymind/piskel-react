@@ -3,7 +3,7 @@ import Jszip from "jszip";
 import { memo, useCallback, useRef, useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import { SpriteAnimator } from "react-sprite-animator";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 import { createSheetFromImages, getImagesFromFiles } from "./utils";
 
@@ -13,7 +13,7 @@ export const FileImport = ({ onCancel, onImport }) => {
   const [newFileName, setNewFileName] = useState("");
   const [draggedFiles, setDraggedFiles] = useState(null);
   const [zoom, setZoom] = useLocalStorage("zoomLevelImport", 1);
-  const [fps, setFps] = useState(12);
+  const [fps, setFps] = useLocalStorage("preferredImportFps", 12);
   const [isPaused, setIsPaused] = useState(false);
   const [frame, setFrame] = useState(0);
 
@@ -22,10 +22,13 @@ export const FileImport = ({ onCancel, onImport }) => {
   };
 
   const handleDropFile = (inFiles) => {
-    console.log({ inFiles });
-    const firstFile = inFiles[0];
+    console.log(Object.values(inFiles));
+    const firstFile = Object.values(inFiles).find((file) => file?.name?.toLowerCase().endsWith(".png"));
+    if (!firstFile) {
+      return;
+    }
     const reader = new FileReader();
-    const [fileName, extension] = firstFile.name.split(".");
+    const [fileName, extension] = firstFile?.name?.split(".");
 
     console.log({ extension, inFiles });
     if (extension.toLowerCase() === "zip") {
@@ -48,11 +51,12 @@ export const FileImport = ({ onCancel, onImport }) => {
         console.log({ imageFrames });
         if (imageFrames.length === 0) return;
         const spriteSheet = createSheetFromImages(imageFrames);
-        setDraggedFiles({ imageFrames, maxWidth, maxHeight, spriteSheet });
+        setDraggedFiles({ imageFrames, maxWidth, maxHeight, spriteSheet, fps });
         setIsPaused(false);
+        setFrame(0);
       });
     } else {
-      toast.warn("Please drop multiple PNG files or a zip archive containing them", { position: "bottom-left" });
+      // toast.warn("Please drop multiple PNG files or a zip archive containing them", { position: "bottom-left" });
     }
 
     if (firstFile) {

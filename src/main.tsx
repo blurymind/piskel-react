@@ -41,13 +41,9 @@ declare module "@tanstack/react-router" {
   }
 }
 
-import { ToastContainer, toast } from "react-toastify";
-
 // omfg https://stackoverflow.com/questions/72851548/permission-denied-to-github-actionsbot
 createRoot(document.getElementById("root")!).render(
-  <ToastContainer>
-    <App />
-  </ToastContainer>,
+  <App />,
 
   // <StrictMode>
   //   {/* <QueryClientProvider client={queryClient}> */}
