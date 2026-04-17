@@ -39,6 +39,7 @@ export const PiskelReact = ({ piskelAppPath = "piskel/dest/prod/index.html", ref
   // todo https://github.com/4ian/GDevelop/blob/94b980313b7ac851610e12a55f767dcfc3316d4c/newIDE/app/public/external/piskel/piskel-main.js#L122
   const onSavePiskel = () => {
     const { src, name } = savePiskel();
+    console.log({ src, name });
     setPiskels((prev) => ({
       ...prev,
       [name]: {
@@ -47,6 +48,7 @@ export const PiskelReact = ({ piskelAppPath = "piskel/dest/prod/index.html", ref
       },
     }));
   };
+  console.log({ piskels });
 
   useEffect(() => {
     console.log("load prop changed", { piskelFile });
@@ -90,9 +92,7 @@ export const PiskelReact = ({ piskelAppPath = "piskel/dest/prod/index.html", ref
 
   const onSelectFile = (item) => {
     onSavePiskel();
-    setTimeout(() => {
-      loadSprite(item.src);
-    }, 100);
+    loadSprite(item.src);
   };
 
   const onCloseFile = (sprite) => {

@@ -22,7 +22,6 @@ export const usePiskel = ({ piskelRef }) => {
     const pskl = getPiskel();
     if (!pskl || !sprite) return;
     const app = pskl.app;
-    const fps = sprite.piskel.fps;
     const piskel = sprite.piskel;
     const descriptor = new pskl.model.piskel.Descriptor(
       piskel.name,
@@ -202,7 +201,7 @@ export const sprites = {
   sonic: {
     modelVersion: 2,
     piskel: {
-      name: "Imported piskel",
+      name: "sonic", // note that name and key must be the same always
       description: "",
       fps: 12,
       height: 50,
@@ -215,7 +214,7 @@ export const sprites = {
   mario: {
     modelVersion: 2,
     piskel: {
-      name: "Mario kart",
+      name: "mario",
       description: "",
       fps: 3,
       height: 42,
