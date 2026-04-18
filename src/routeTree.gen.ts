@@ -9,15 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as PiskelReactRouteImport } from './routes/piskel-react'
+import { Route as PiskelPlusRouteImport } from './routes/piskel-plus'
 import { Route as FilesRouteImport } from './routes/files'
 import { Route as EditorsRouteImport } from './routes/editors'
 import { Route as CodeRouteImport } from './routes/code'
 import { Route as AboutRouteImport } from './routes/about'
 
-const PiskelReactRoute = PiskelReactRouteImport.update({
-  id: '/piskel-react',
-  path: '/piskel-react',
+const PiskelPlusRoute = PiskelPlusRouteImport.update({
+  id: '/piskel-plus',
+  path: '/piskel-plus',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FilesRoute = FilesRouteImport.update({
@@ -46,14 +46,14 @@ export interface FileRoutesByFullPath {
   '/code': typeof CodeRoute
   '/editors': typeof EditorsRoute
   '/files': typeof FilesRoute
-  '/piskel-react': typeof PiskelReactRoute
+  '/piskel-plus': typeof PiskelPlusRoute
 }
 export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/code': typeof CodeRoute
   '/editors': typeof EditorsRoute
   '/files': typeof FilesRoute
-  '/piskel-react': typeof PiskelReactRoute
+  '/piskel-plus': typeof PiskelPlusRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -61,14 +61,14 @@ export interface FileRoutesById {
   '/code': typeof CodeRoute
   '/editors': typeof EditorsRoute
   '/files': typeof FilesRoute
-  '/piskel-react': typeof PiskelReactRoute
+  '/piskel-plus': typeof PiskelPlusRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/about' | '/code' | '/editors' | '/files' | '/piskel-react'
+  fullPaths: '/about' | '/code' | '/editors' | '/files' | '/piskel-plus'
   fileRoutesByTo: FileRoutesByTo
-  to: '/about' | '/code' | '/editors' | '/files' | '/piskel-react'
-  id: '__root__' | '/about' | '/code' | '/editors' | '/files' | '/piskel-react'
+  to: '/about' | '/code' | '/editors' | '/files' | '/piskel-plus'
+  id: '__root__' | '/about' | '/code' | '/editors' | '/files' | '/piskel-plus'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -76,16 +76,16 @@ export interface RootRouteChildren {
   CodeRoute: typeof CodeRoute
   EditorsRoute: typeof EditorsRoute
   FilesRoute: typeof FilesRoute
-  PiskelReactRoute: typeof PiskelReactRoute
+  PiskelPlusRoute: typeof PiskelPlusRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/piskel-react': {
-      id: '/piskel-react'
-      path: '/piskel-react'
-      fullPath: '/piskel-react'
-      preLoaderRoute: typeof PiskelReactRouteImport
+    '/piskel-plus': {
+      id: '/piskel-plus'
+      path: '/piskel-plus'
+      fullPath: '/piskel-plus'
+      preLoaderRoute: typeof PiskelPlusRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/files': {
@@ -124,7 +124,7 @@ const rootRouteChildren: RootRouteChildren = {
   CodeRoute: CodeRoute,
   EditorsRoute: EditorsRoute,
   FilesRoute: FilesRoute,
-  PiskelReactRoute: PiskelReactRoute,
+  PiskelPlusRoute: PiskelPlusRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
