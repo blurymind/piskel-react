@@ -172,23 +172,32 @@ export const PiskelReact = ({ piskelAppPath = "piskel/dest/prod/index.html", ref
 
   return (
     <div style={{ height: "100%", width: "100%" }} onPointerCancel={() => console.log("missed")}>
-      {/* <div className="absolute bottom-10 right-5 p-2 bg-gray-700 w-50 overflow-hidden" style={{whiteSpace: "nowrap"}} title={currentName}>{currentName}</div> */}
-
       <div className="absolute top-10 rounded-sm w-20 overflow-hidden h-50 bg-gray-600/20">
         <div className="flex flex-1 gap-3 m-2 flex-col">
-          <button className="hover:bg-gray-500" onClick={onSavePiskel}>
+          <button title="Save piskel" className="hover:bg-gray-500" onClick={onSavePiskel}>
             Save
           </button>
           <button className="hover:bg-gray-500" onClick={createEmptyAnimation}>
             New
           </button>
-          <button className="hover:bg-gray-500" onClick={onCopyToClip}>
-            Copy
-          </button>
-          <button className="hover:bg-gray-500" onClick={onPasteClip}>
+
+          <button title="Paste piskel data from clipboard" className="hover:bg-gray-500" onClick={onPasteClip}>
             Paste
           </button>
         </div>
+      </div>
+
+      <div className="gap-1 flex flex-col absolute bottom-10 rounded-sm w-24 overflow-hidden h-50 bg-gray-600/20">
+        <div className="pl-2">File:</div>
+        <div className=" pl-2 bg-gray-700 w-50 overflow-hidden" style={{ whiteSpace: "nowrap" }} title={currentName}>
+          {currentName}
+        </div>
+        <button title="Copy piskel data to cliboard" className="  hover:bg-gray-500" onClick={onCopyToClip}>
+          Copy
+        </button>
+        <button title="Copy piskel data to cliboard" className="  hover:bg-gray-500" onClick={onCopyToClip}>
+          Export
+        </button>
       </div>
 
       <div className="absolute left-0 top-46 bg-gray-900 overflow-hidden">
@@ -207,9 +216,10 @@ export const PiskelReact = ({ piskelAppPath = "piskel/dest/prod/index.html", ref
         >
           <div
             className="p-2"
-            onPointerEnter={() => setIsImporterOpen(true)}
+            // onPointerEnter={() => setIsImporterOpen(true)}
             onClick={() => setIsImporterOpen(!isImporterOpen)}
             onDragEnter={() => setIsImporterOpen(true)}
+            title="Drag and drop files here"
           >
             [Import]
           </div>
