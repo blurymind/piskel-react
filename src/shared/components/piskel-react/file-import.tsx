@@ -5,6 +5,7 @@ import { FileUploader } from "react-drag-drop-files";
 import { SpriteAnimator } from "react-sprite-animator";
 // import { toast } from "react-toastify";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
+import SpriteCutter from "./sprite-cutter";
 import { createSheetFromImages, getImagesFromFiles } from "./utils";
 
 const buttonClass = "border-1 border-gray-400 px-2 rounded-sm opacity-70 hover:opacity-90";
@@ -12,13 +13,14 @@ export const FileImport = ({ onCancel, onImport }) => {
   const spritePrevRef = useRef(null);
   const [newFileName, setNewFileName] = useState("");
   const [draggedFiles, setDraggedFiles] = useState(null);
+  const [cutSprite, setCutSprite] = useLocalStorage("cutSprite", { col: 1, row: 1 });
   const [zoom, setZoom] = useLocalStorage("zoomLevelImport", 1);
   const [fps, setFps] = useLocalStorage("preferredImportFps", 12);
   const [isPaused, setIsPaused] = useState(false);
   const [frame, setFrame] = useState(0);
 
   const onConfirmDraggedFile = () => {
-    onImport(draggedFiles, newFileName);
+    onImport(draggedFiles, newFileName, cutSprite);
   };
 
   const handleDropFile = (inFiles) => {
@@ -41,8 +43,8 @@ export const FileImport = ({ onCancel, onImport }) => {
           getImagesFromFiles(zipData.files).then(({ imageFrames, maxWidth, maxHeight }) => {
             setNewFileName(fileName);
             if (imageFrames.length === 0) return;
-            const spriteSheet = createSheetFromImages(imageFrames);
-            setDraggedFiles({ imageFrames, maxWidth, maxHeight, spriteSheet });
+            const [spriteSheet, canvas] = createSheetFromImages(imageFrames);
+            setDraggedFiles({ imageFrames, maxWidth, maxHeight, spriteSheet, canvas });
             setIsPaused(false);
           });
         });
@@ -52,8 +54,8 @@ export const FileImport = ({ onCancel, onImport }) => {
         setNewFileName(fileName);
         console.log({ imageFrames });
         if (imageFrames.length === 0) return;
-        const spriteSheet = createSheetFromImages(imageFrames);
-        setDraggedFiles({ imageFrames, maxWidth, maxHeight, spriteSheet, fps });
+        const [spriteSheet, canvas] = createSheetFromImages(imageFrames);
+        setDraggedFiles({ imageFrames, maxWidth, maxHeight, spriteSheet, fps, canvas });
         setIsPaused(false);
         setFrame(0);
       });
@@ -88,6 +90,9 @@ export const FileImport = ({ onCancel, onImport }) => {
     });
     spritePrevRef?.current?.reset();
   };
+
+  console.log({ draggedFiles });
+  const isASpriteSheet = draggedFiles?.imageFrames?.length === 1;
   return (
     <div
       onDragEnter={() => setDraggedFiles(null)}
@@ -103,43 +108,82 @@ export const FileImport = ({ onCancel, onImport }) => {
               value={newFileName}
               onChange={(e) => setNewFileName(e.target.value)}
             ></input>
-            <div>frames x {draggedFiles?.imageFrames?.length}</div>{" "}
-            <div
-              onWheel={onWheelZoom}
-              className={buttonClass}
-              title="Zoom level. Click to reset, scroll to resize"
-              onClick={() => {
-                setZoom(1);
-              }}
-            >
-              size {zoom.toFixed(1)}
-            </div>
+            <div>frames x {isASpriteSheet ? cutSprite.row * cutSprite.col : draggedFiles?.imageFrames?.length}</div>{" "}
+            {!isASpriteSheet && (
+              <div
+                onWheel={onWheelZoom}
+                className={buttonClass}
+                title="Zoom level. Click to reset, scroll to resize"
+                onClick={() => {
+                  setZoom(1);
+                }}
+              >
+                size {zoom.toFixed(1)}
+              </div>
+            )}
           </div>
 
-          <div
-            onWheel={onWheelZoom}
-            className="overflow-hidden h-full w-full flex-1 rounded-sm"
-            style={{ imageRendering: "pixelated" }}
-            title="Scroll to zoom"
-          >
-            <TransformWrapper>
-              <TransformComponent wrapperClass="zoom_wrapper_class_preview_sprite">
-                <SpriteAnimator
-                  className="rounded-sm border-1 border-amber-200/60"
-                  scale={zoom}
-                  fps={fps}
-                  key={fps}
-                  ref={spritePrevRef}
-                  sprite={draggedFiles?.spriteSheet?.src}
-                  width={draggedFiles?.maxWidth}
-                  height={draggedFiles?.maxHeight}
-                  shouldAnimate={!isPaused}
-                  frame={frame}
-                />
-              </TransformComponent>
-            </TransformWrapper>
-          </div>
+          <div className="f-full w-full flex-row flex">
+            {!isASpriteSheet && (
+              <div
+                onWheel={onWheelZoom}
+                className="overflow-hidden h-full w-full flex-1 rounded-sm"
+                style={{ imageRendering: "pixelated" }}
+                title="Scroll to zoom"
+              >
+                <TransformWrapper>
+                  <TransformComponent wrapperClass="zoom_wrapper_class_preview_sprite">
+                    <SpriteAnimator
+                      className="rounded-sm border-1 border-amber-200/60"
+                      scale={zoom}
+                      fps={fps}
+                      key={fps}
+                      ref={spritePrevRef}
+                      sprite={draggedFiles?.spriteSheet?.src}
+                      width={draggedFiles?.maxWidth}
+                      height={draggedFiles?.maxHeight}
+                      shouldAnimate={!isPaused}
+                      frame={frame}
+                    />
+                  </TransformComponent>
+                </TransformWrapper>
+              </div>
+            )}
 
+            {isASpriteSheet && (
+              <div className="w-full h-full flex flex-row gap-2">
+                <SpriteCutter scale={zoom} image={draggedFiles?.spriteSheet} cutSprite={cutSprite} />
+                <div className="w-23 flex flex-col gap-1">
+                  <div className="flex flex-row gap-2 justify-between">
+                    <div className="">col:</div>
+                    <input
+                      type="number"
+                      min={1}
+                      value={cutSprite.col}
+                      defaultValue={1}
+                      onChange={(e) => {
+                        setCutSprite((p) => ({ ...p, col: Number(e.target.value) }));
+                      }}
+                      className="border-1 border-amber-200 w-12 rounded-sm pl-1"
+                    />
+                  </div>
+                  <div className="flex flex-row gap-2 justify-between">
+                    <div className="">row:</div>
+                    <input
+                      type="number"
+                      min={1}
+                      value={cutSprite.row}
+                      defaultValue={1}
+                      onChange={(e) => {
+                        setCutSprite((p) => ({ ...p, row: Number(e.target.value) }));
+                      }}
+                      className="border-1 border-amber-200 w-12 rounded-sm pl-1"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
           <div className="flex flex-row gap-3 sticky bottom-0 flex-1 justify-between">
             <div className="flex gap-2">
               <button
@@ -149,27 +193,30 @@ export const FileImport = ({ onCancel, onImport }) => {
                 {"<- back"}
               </button>
             </div>
-            <div className="flex gap-2">
-              <div
-                onWheel={onWheelFps}
-                className={buttonClass}
-                title="Fps. Click to reset, Scroll to change"
-                onClick={() => setFps(12)}
-              >
-                fps: {fps}
+            {isASpriteSheet ? null : (
+              <div className="flex gap-2">
+                <div
+                  onWheel={onWheelFps}
+                  className={buttonClass}
+                  title="Fps. Click to reset, Scroll to change"
+                  onClick={() => setFps(12)}
+                >
+                  fps: {fps}
+                </div>
+                <div
+                  className={buttonClass}
+                  onClick={() => {
+                    setIsPaused((p) => !p);
+                    spritePrevRef?.current?.reset();
+                  }}
+                  onWheel={onWheelFrames}
+                  title="Click to Pause/play, Scroll to go through frames"
+                >
+                  {!isPaused ? "playing" : "paused @" + frame}
+                </div>
               </div>
-              <div
-                className={buttonClass}
-                onClick={() => {
-                  setIsPaused((p) => !p);
-                  spritePrevRef?.current?.reset();
-                }}
-                onWheel={onWheelFrames}
-                title="Click to Pause/play, Scroll to go through frames"
-              >
-                {!isPaused ? "playing" : "paused @" + frame}
-              </div>
-            </div>
+            )}
+
             <div className="flex gap-2">
               <button className={buttonClass} onClick={() => onCancel()}>
                 cancel

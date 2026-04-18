@@ -125,15 +125,82 @@ export const usePiskel = ({ piskelRef }) => {
   };
 };
 
+export const getCell = ({ x, y, maxWidth, maxHeight }) => {
+  const col = Math.floor(x / maxWidth);
+  const row = Math.floor(y / maxHeight);
+  const cellX = col * maxWidth;
+  const cellY = row * maxHeight;
+  return { col, row, cellX, cellY };
+};
+export const getCellCoordinates = (e, { cellWidth, cellHeight }) => {
+  const rect = e.target.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  return getCell({ x, y, maxWidth: cellWidth, maxHeight: cellHeight });
+};
+
+export const getClippedRegion = (image, x, y, width, height) => {
+  const canvas = document.createElement("canvas"),
+    ctx = canvas.getContext("2d");
+  canvas.width = width;
+  canvas.height = height;
+  ctx.drawImage(image, x, y, width, height, 0, 0, width, height);
+  return canvas;
+};
+
+export const createImagesFromSheet = (
+  sheetImage: HTMLImageElement,
+  cutSprite = { row: 1, col: 1 },
+): {
+  imageFrames: HTMLImageElement[];
+  maxWidth: number;
+  maxHeight: number;
+} => {
+  const maxWidth = Math.floor(sheetImage.width / cutSprite.col);
+  const maxHeight = Math.floor(sheetImage.height / cutSprite.row);
+
+  const imageFrames = [];
+  for (const col of Array(cutSprite.col).keys()) {
+    for (const row of Array(cutSprite.row).keys()) {
+      const x = col * maxWidth;
+      const y = row * maxHeight;
+      const cell = getCell({ x, y, maxWidth, maxHeight });
+      const clippedCan = getClippedRegion(
+        sheetImage,
+        cell.cellX,
+        cell.cellY,
+        maxWidth,
+        maxHeight,
+      );
+      const finalImage = new Image();
+      finalImage.src = clippedCan.toDataURL();
+      // console.log({
+      //   x,
+      //   y,
+      //   row,
+      //   col,
+      //   cell,
+      //   clippedCan,
+      //   finalImage,
+      //   maxWidth,
+      //   maxHeight,
+      //   sheetImage,
+      // });
+      imageFrames.push(finalImage);
+    }
+  }
+  return { imageFrames, maxWidth, maxHeight };
+};
+
 export const createSheetFromImages = (
   imageFrames: HTMLImageElement[],
-): HTMLImageElement => {
-  if (imageFrames.length === 0) return null;
+): [HTMLImageElement, HTMLCanvasElement] => {
+  if (imageFrames.length === 0) return [null, null];
   const c: HTMLCanvasElement = document.createElement("canvas");
   const ctx = c.getContext("2d");
   console.log(imageFrames);
-  const frameWidth = imageFrames[1].width;
-  const frameHeight = imageFrames[1].height;
+  const frameWidth = imageFrames[0].width;
+  const frameHeight = imageFrames[0].height;
   const width = frameWidth * imageFrames.length;
   c.width = width;
   c.height = frameHeight;
@@ -145,7 +212,7 @@ export const createSheetFromImages = (
   });
   const image = new Image();
   image.src = c.toDataURL();
-  return image;
+  return [image, c];
 };
 
 // create Images from jszip files or regular files
