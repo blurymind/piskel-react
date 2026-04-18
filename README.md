@@ -6,6 +6,7 @@ It improves the UX by adding the following features:
   - Ability to store your work on your computer's local cache and revisit it instantly
   - New import features that allow you to drag and drop png frames or a zip of frames and preview their animation before importing
   - Copy piskel data to clipboard and paste it from clipboard
+  - Can be installed as a PWA. This means you can run it when you are offline and it looks more like a native app
 
 If this is well received...
 Future plans:
