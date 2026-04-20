@@ -263,7 +263,7 @@ export const FileImport = ({ onCancel, onImport }) => {
           name="file"
           multiple
           // types={fileTypes}
-          label=" Drop a zip with pngs or multiple png images. Drop one png file to slice its spritesheet into frames"
+          label=" Drop a zip with pngs or multiple png images. Drop one png file to slice its spritesheet into frames. Drop animated webp to extract its frames"
           uploadedLabel="Drop zip"
         />
       )}
