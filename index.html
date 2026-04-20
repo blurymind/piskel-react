@@ -5,7 +5,16 @@
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0," />
     <title>Piskel+</title>
-    <script type="module" crossorigin src="/piskel-plus/assets/index-BxBdzGm_.js"></script>
+    <script>
+      window.util = {
+        promisify: ()=>{}
+      }
+      window.Buffer = { inject: ()=>{}, alloc : ()=> {}}
+      window.process = {
+        env: {}
+      }
+    </script>
+    <script type="module" crossorigin src="/piskel-plus/assets/index-DsbtZQfJ.js"></script>
     <link rel="stylesheet" crossorigin href="/piskel-plus/assets/index-qNrXNfEE.css">
   <link rel="manifest" href="/piskel-plus/manifest.webmanifest">
 <meta name="theme-color" content="#000000">
