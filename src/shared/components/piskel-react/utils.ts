@@ -298,7 +298,8 @@ export const downloadZip = (layers, fileName, layerData) => {
     const folder = zip.folder(fileName);
     folder.file(
       "layers.cfg",
-      `[sprite]\nrows=${layerData.rows}\ncolumns=${layerData.columns}`,
+      `[sprite]\nrows=${layerData.rows}\ncolumns=${layerData.columns}\nname: ${layerData.piskel.name}\nwidth: ${layerData.piskel.width}\nheight: ${layerData.piskel.height}\nfps: ${layerData.piskel.fps}
+      `,
     );
     folder.file("layers.json", JSON.stringify(layerData.kaplay));
     layers.forEach((layer) => {

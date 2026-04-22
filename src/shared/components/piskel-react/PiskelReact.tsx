@@ -186,7 +186,14 @@ export const PiskelReact = ({ piskelAppPath = "piskel/dest/prod/index.html", ref
         piskel,
         rows,
         columns,
-        kaplay: { [piskel.name]: { from: 0, to: columns, speed: piskel.fps } },
+        kaplay: {
+          name: piskel.name,
+          width: piskel.width,
+          height: piskel.height,
+          from: 0,
+          to: columns,
+          speed: piskel.fps,
+        },
       });
     });
   };
