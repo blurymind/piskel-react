@@ -22,6 +22,7 @@
     "ace-builds": "^1.43.5",
     "ace-diff": "^3.0.3",
     "classnames": "^2.5.1",
+    "file-saver": "^2.0.5",
     "gifuct-js": "^2.1.2",
     "jszip": "^3.10.1",
     "react": "^19.0.0",

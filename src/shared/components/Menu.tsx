@@ -2,7 +2,7 @@ import { useState } from "react";
 
 const Menu = ({ items, label, onSelect, onClose, selected }) => {
   const [isVisible, setIsVisible] = useState(false);
-  console.log({ items });
+
   const onOpen = () => {
     setIsVisible((p) => !p);
   };
@@ -13,7 +13,7 @@ const Menu = ({ items, label, onSelect, onClose, selected }) => {
       </div>
       {isVisible && (
         <div
-          className="absolute left-3 w-fit flex-1 h-fit bg-gray-700 rounded-sm border-cyan-100 border-1"
+          className="z-80 absolute left-3 w-fit flex-1 h-fit bg-gray-700 rounded-sm border-cyan-100 border-1"
           onPointerLeave={() => setIsVisible(false)}
         >
           {items.map((item, index) => (

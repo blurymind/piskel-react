@@ -1,5 +1,6 @@
+import FileSaver from "file-saver";
+import Jszip from "jszip";
 import { useCallback } from "react";
-import u8 from "to-uint8";
 
 //https://blurymind.github.io/piskel-react
 export const getNewPiskelTemplate = (name: string) => ({
@@ -114,6 +115,36 @@ export const usePiskel = ({ piskelRef }) => {
     return piskelFile;
   };
 
+  const getLayersAsImages = () => {
+    const piskel = getPiskelData().piskel;
+    const imageLayers = [];
+
+    const rows = 1;
+    let columns = -1;
+    return Promise.all(
+      piskel.layers.map((layerString) => {
+        return new Promise((resolve) => {
+          const layerData = JSON.parse(layerString);
+
+          const b64 = layerData?.chunks?.[0]?.base64PNG ?? "";
+          fetch(b64).then((res) => {
+            if (columns === -1) {
+              columns = layerData.frameCount;
+            }
+            const blob = res.blob();
+            imageLayers.push({
+              name: layerData.name,
+              blob,
+              b64,
+              frameCount: layerData.frameCount,
+            });
+            resolve(1);
+          });
+        });
+      }),
+    ).then(() => ({ imageLayers, piskel, rows, columns }));
+  };
+
   return {
     loadPSprite,
     getPiskel,
@@ -123,6 +154,7 @@ export const usePiskel = ({ piskelRef }) => {
     loadImageFramesIntoPiskel,
     getPiskelData,
     openSettings,
+    getLayersAsImages,
   };
 };
 
@@ -258,6 +290,25 @@ export const getImagesFromWebPFrames = (frames) => {
       });
     }),
   ).then(() => ({ imageFrames, maxWidth, maxHeight }));
+};
+
+export const downloadZip = (layers, fileName, layerData) => {
+  return new Promise((resolve) => {
+    const zip = new Jszip();
+    const folder = zip.folder(fileName);
+    folder.file(
+      "layers.cfg",
+      `[sprite]\nrows=${layerData.rows}\ncolumns=${layerData.columns}`,
+    );
+    folder.file("layers.json", JSON.stringify(layerData.kaplay));
+    layers.forEach((layer) => {
+      folder.file(`${layer.name}.png`, layer.blob);
+    });
+    zip.generateAsync({ type: "blob" }).then((content) => {
+      FileSaver.saveAs(content, fileName);
+      resolve(content);
+    });
+  });
 };
 
 export const getImagesFromGifPFrames = (frames) => {

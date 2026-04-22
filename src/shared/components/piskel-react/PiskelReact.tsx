@@ -6,7 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import Menu from "../Menu";
 import FileImport from "./file-import";
 
-import { createImagesFromSheet, sprites, usePiskel } from "./utils";
+import { createImagesFromSheet, downloadZip, sprites, usePiskel } from "./utils";
 // copy of src/shared/components/piskel-react/piskel/dest/prod/index.html
 export const PiskelReact = ({ piskelAppPath = "piskel/dest/prod/index.html", ref, piskelFile, hideHeader = true }) => {
   const [currentName, setCurrentName] = useLocalStorage("currentPiskelName", "");
@@ -25,6 +25,7 @@ export const PiskelReact = ({ piskelAppPath = "piskel/dest/prod/index.html", ref
     openSettings,
     initPiskelApp,
     getPiskelData,
+    getLayersAsImages,
     loadImageFramesIntoPiskel,
   } = usePiskel({ piskelRef });
 
@@ -177,6 +178,19 @@ export const PiskelReact = ({ piskelAppPath = "piskel/dest/prod/index.html", ref
     }));
   };
 
+  const onExportZippedLayers = () => {
+    onSavePiskel();
+    getLayersAsImages().then(({ imageLayers, piskel, rows, columns }) => {
+      console.log({ imageLayers });
+      downloadZip(imageLayers, currentPiskel.label, {
+        piskel,
+        rows,
+        columns,
+        kaplay: { [piskel.name]: { from: 0, to: columns, speed: piskel.fps } },
+      });
+    });
+  };
+
   return (
     <div style={{ height: "100%", width: "100%" }} onPointerCancel={() => console.log("missed")}>
       <div className="absolute top-10 rounded-sm w-20 overflow-hidden h-50 bg-gray-600/20">
@@ -194,7 +208,7 @@ export const PiskelReact = ({ piskelAppPath = "piskel/dest/prod/index.html", ref
         </div>
       </div>
 
-      <div className="gap-1 flex flex-col absolute bottom-10 rounded-sm w-24 overflow-hidden h-50">
+      <div className="z-50 gap-1 flex flex-col absolute bottom-10 rounded-sm w-24 overflow-hidden h-50">
         <div className="pl-2">File:</div>
         <div className=" pl-2 bg-gray-700 w-50 overflow-hidden" style={{ whiteSpace: "nowrap" }} title={currentName}>
           {currentName}
@@ -202,8 +216,15 @@ export const PiskelReact = ({ piskelAppPath = "piskel/dest/prod/index.html", ref
         <button title="Copy piskel data to cliboard" className="  hover:bg-gray-500" onClick={onCopyToClip}>
           Copy
         </button>
-        <button title="Copy piskel data to cliboard" className="  hover:bg-gray-500" onClick={onCopyToClip}>
-          Export
+        {/* <Menu
+          // selected={currentName}
+          // onClose={onCloseFile}
+          onSelect={onSelectFile}
+          label="Export"
+          items={[{ label: "Zipped layer spritesheets" }]}
+        /> */}
+        <button title="Export zipped layers" className="  hover:bg-gray-500" onClick={onExportZippedLayers}>
+          Export layers
         </button>
       </div>
 
